@@ -6,11 +6,13 @@ const DefaultLayout: React.FC = ({ children }: any) => {
       {/* Add your default layout components here */}
       <header>
         <nav className="navigation_header_container">
-          <div className="navigation_logo">  <img src="/app/favicon.ico" alt="Logo" /></div>
+          <div className="navigation_logo">
+            <img className="navigation_image" src="Project.png" alt="Logo" />
+          </div>
           <ul className="navigation_group navigation_menu">
             <li className="navigation_items">Reservations</li>
             <li className="navigation_items">Recent Visits</li>
-             <li className="navigation_items">Favorites</li>
+            <li className="navigation_items">Favorites</li>
           </ul>
           <div className="navigation_separator"></div>
           <ul className="navigation_group navigation_aside">

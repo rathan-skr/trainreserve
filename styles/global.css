@@ -1,12 +1,16 @@
+html {
+  font: 1em sans-serif;
+}
 :root {
   --background-white: #fff;
 }
 main {
   margin-top: 50px;
-  minHeight: calc(100vh - 50px);
+  minheight: calc(100vh - 50px);
 }
-body{
+body {
   margin-top: 55px;
+  margin: 0;
 }
 header {
   position: fixed;
@@ -16,23 +20,20 @@ header {
   z-index: 20;
   width: 100%;
   font: 1em sans-serif;
-  height: '50px';
+  height: "50px";
 }
 .navigation_header_container {
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  display: flex;
   margin: 0 auto;
-  
 }
 .navigation_group {
   display: flex;
-
   padding: 0;
 }
 .navigation_items {
-  list-style-type: none; 
+  list-style-type: none;
   padding: 0;
   margin: 0;
   border-bottom: 3px solid #0000;
@@ -40,17 +41,102 @@ header {
   box-sizing: border-box;
   margin-right: 20px;
   white-space: nowrap;
-
- 
 }
 .navigation_logo {
   padding-right: 20px;
   padding-left: 20px;
-
+  border-bottom: 5px solid #0000;
+  border-top: 5px solid #0000;
+  width: 40px;
+  height: 40px;
+  border-radius: 25px;
 }
-
-.navigation_separator{
- display: block;
- width:100%;
-
+img.navigation_image {
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+}
+.main_image_container {
+  position: relative;
+  width: 100%;
+}
+.main_image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+}
+.image_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    to right,
+    rgba(3, 3, 3, 0.274),
+    rgba(5, 5, 5, 0.715)
+  );
+}
+.navigation_separator {
+  display: block;
+  width: 100%;
+}
+.main_text {
+  position: absolute;
+  color: #fcfbfb;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-size: auto;
+  width: auto;
+  z-index: 1;
+  padding: 0 20px;
+}
+h1.main_h1 {
+  margin-bottom: 0em;
+  text-align: center;
+}
+h3.main_h3 {
+  margin-top: 0em;
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .main_image_container {
+    height: 25vh;
+    background-color: rgb(84, 51, 7);
+  }
+  .main_image{
+    display: block;
+    width: 100%;
+    height: 25vh;
+    object-fit: cover;
+    object-position:  30% 20%; ; 
+  }
+  .main_text {
+    position: absolute;
+    color: #fcfbfb;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    text-align: center;
+  }
+}
+.main_container{
+  height:1400px;
 }
