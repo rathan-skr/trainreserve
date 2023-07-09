@@ -3,25 +3,25 @@
 import React, { useState } from 'react';
 
 const SeatSelection: React.FC = () => {
-  const rows = 20;
+  const rows = 10;
   const seatsPerRow = 4;
 
-  const preselectedSeats = ['2-1', '5-3']; // Add your preselected seats here
+  const preselectedSeats = [5, 23]; // Add your preselected seats here
 
-  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
 
-  const handleSeatSelection = (seatId: string) => {
+  const handleSeatSelection = (seatNumber: number) => {
     // Check if the seat is preselected or not before handling the selection
-    if (preselectedSeats.includes(seatId)) {
+    if (preselectedSeats.includes(seatNumber)) {
       return;
     }
 
     // Toggle seat selection
     setSelectedSeats((prevSelectedSeats) => {
-      if (prevSelectedSeats.includes(seatId)) {
-        return prevSelectedSeats.filter((s) => s !== seatId);
+      if (prevSelectedSeats.includes(seatNumber)) {
+        return prevSelectedSeats.filter((s) => s !== seatNumber);
       } else {
-        return [...prevSelectedSeats, seatId];
+        return [...prevSelectedSeats, seatNumber];
       }
     });
   };
@@ -33,10 +33,10 @@ const SeatSelection: React.FC = () => {
       const seats: JSX.Element[] = [];
 
       for (let seat = 1; seat <= seatsPerRow; seat++) {
-        const seatId = `${row}-${seat}`;
+        const seatNumber = (row - 1) * seatsPerRow + seat;
 
-        const isPreselected = preselectedSeats.includes(seatId);
-        const isChecked = selectedSeats.includes(seatId);
+        const isPreselected = preselectedSeats.includes(seatNumber);
+        const isChecked = selectedSeats.includes(seatNumber);
 
         seats.push(
           <label key={`seat-${row}-${seat}`} className="seat-label">
@@ -44,9 +44,9 @@ const SeatSelection: React.FC = () => {
               type="checkbox"
               checked={isChecked}
               disabled={isPreselected}
-              onChange={() => handleSeatSelection(seatId)}
+              onChange={() => handleSeatSelection(seatNumber)}
             />
-            {seat}
+            <span className="seat-number">{seatNumber}</span>
           </label>
         );
       }
