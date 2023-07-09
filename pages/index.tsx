@@ -1,3 +1,4 @@
+import SeatSelection from "@/components/SeatSelection";
 import React from "react";
 
 const Home: React.FC = () => {
@@ -35,7 +36,8 @@ const Home: React.FC = () => {
           </div>
           <button>Check Availabilty</button>
         </div>
-      </div>
+       
+      </div> <SeatSelection />
     </div>
   );
 };
