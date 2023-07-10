@@ -6,7 +6,7 @@ const SeatSelection: React.FC = () => {
   const rows = 10;
   const seatsPerRow = 4;
 
-  const preselectedSeats = [5, 23]; // Add your preselected seats here
+  const preselectedSeats = [5, 23,9,11]; // Add your preselected seats here
 
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
 
@@ -63,7 +63,7 @@ const SeatSelection: React.FC = () => {
 
   return (
     <div className="seat-selection-container">
-      <h1>Seat Selection</h1>
+     <h3 className="main_form_h3"> Select Seats</h3>
       <div className="seat-selection-wrapper">{renderSeatSelection()}</div>
     </div>
   );

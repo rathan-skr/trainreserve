@@ -3,7 +3,7 @@ html {
 }
 :root {
   --background-white: #fff;
-  --size: 1rem;
+  --size: 2rem;
   --border: 0.2rem;
 }
 main {
@@ -142,7 +142,6 @@ h3.main_h3 {
 .main_container {
   height: 1400px;
   position: relative;
-  align-items: center;
 }
 .main_form {
   position: absolute;
@@ -157,8 +156,9 @@ h3.main_h3 {
   margin-right: auto;
   transition: box-shadow 0.3s ease;
   max-width: 1024px;
-  transform: translate(25%, -50%);
+  transform: translate(25%, -30%);
   border-radius: 5px;
+  z-index: 10;
 }
 .main_form_content {
   background-color: var(--background-white);
@@ -200,38 +200,12 @@ h3.main_h3 {
   background-color: #ff6701db;
   box-shadow: inset 0px 0px 2px #150901;
 }
-@media (max-width: 1024px) {
-  .main_form {
-    width: 100%;
-    font: 1em sans-serif;
-    height: "50px";
-    transform: translate(0%, 0%);
-  }
-  .main_form_content {
-    background-color: var(--background-white);
-    height: "50px";
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .main_form_content input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    width: 400px;
-    height: 50px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
 
 .seat-selection-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+
 }
 
 .seat-selection-wrapper {
@@ -264,7 +238,7 @@ label {
 }
 
 input[type="checkbox"] {
-  margin-right: 5px;
+  margin: 25px;
 }
 
 .seat-label {
@@ -276,9 +250,7 @@ input[type="checkbox"] {
   width: 50x;
   padding: 2px;
   box-sizing: border-box;
-  font: 0.5em sans-serif;
-
-
+  font: 0.8rem sans-serif;
 }
 
 .seat-number {
@@ -307,7 +279,6 @@ input[type="checkbox"] {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 input:checked + .checkbox {
@@ -316,7 +287,46 @@ input:checked + .checkbox {
   border-width: 0.01rem;
 }
 
-input:checked + .dark {
-  background: white;
-  border: var(--border) solid white;
+input:disabled + .checkbox {
+  background: rgba(128, 128, 128, 0.471);
+  border: var(--border) solid rgba(128, 128, 128, 0.251);
+  border-width: 0.01rem;
+}
+@media (max-width: 1024px) {
+  .main_form {
+    width: 100%;
+    font: 1em sans-serif;
+    height: "50px";
+    transform: translate(0%, 0%);
+  }
+  .main_form_content {
+    background-color: var(--background-white);
+    height: "50px";
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .main_form_content input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width:315px;
+    height: 50px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  input[type="checkbox"] {
+    margin: 8px;
+  }
+  .checkbox {
+    height: 1rem;
+    border-radius: 5px;
+    border: var(--border) solid grey;
+    width:1rem;
+    border-width: 0.01rem;
+
+  }
 }

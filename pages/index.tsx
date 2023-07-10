@@ -36,8 +36,8 @@ const Home: React.FC = () => {
           </div>
           <button>Check Availabilty</button>
         </div>
-       
-      </div> <SeatSelection />
+        <SeatSelection />
+      </div>
     </div>
   );
 };
