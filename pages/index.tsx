@@ -1,4 +1,5 @@
 import SeatSelection from "@/components/SeatSelection";
+import TrainBoxComponent from "@/components/TrainBox";
 import React from "react";
 
 const Home: React.FC = () => {
@@ -36,7 +37,7 @@ const Home: React.FC = () => {
           </div>
           <button>Check Availabilty</button>
         </div>
-        <SeatSelection />
+        <TrainBoxComponent/>
       </div>
     </div>
   );

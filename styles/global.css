@@ -206,6 +206,7 @@ h3.main_h3 {
   flex-direction: column;
   align-items: center;
 
+
 }
 
 .seat-selection-wrapper {
@@ -319,18 +320,38 @@ input:disabled + .checkbox {
     margin-right: auto;
   }
   input[type="checkbox"] {
-    margin: 8px;
+    margin: 15px;
+    
   }
   .checkbox {
-    height: 1rem;
+    height: 2rem;
     border-radius: 5px;
     border: var(--border) solid grey;
-    width:1rem;
+    width:2rem;
     border-width: 0.01rem;
-
+    font: 1rem sans-serif;
   }
 }
 
 .column-gap {
   margin-bottom: 20px;
+}
+.swipe-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-ar;
+ 
+}
+
+.swipe-button {
+  font-size: 24px;
+  padding: 8px;
+  cursor: pointer;
+  margin: 0 10px; 
+}
+
+.seat-selection-box {
+  width: 450px;
+  align-self: center;
+
 }
