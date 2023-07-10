@@ -330,3 +330,7 @@ input:disabled + .checkbox {
 
   }
 }
+
+.column-gap {
+  margin-bottom: 20px;
+}

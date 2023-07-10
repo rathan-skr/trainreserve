@@ -28,16 +28,16 @@ const SeatSelection: React.FC = () => {
 
   const renderSeatSelection = () => {
     const seatSelection: JSX.Element[] = [];
-
+  
     for (let row = 1; row <= rows; row++) {
       const seats: JSX.Element[] = [];
-
+  
       for (let seat = 1; seat <= seatsPerRow; seat++) {
         const seatNumber = (row - 1) * seatsPerRow + seat;
-
+  
         const isPreselected = preselectedSeats.includes(seatNumber);
         const isChecked = selectedSeats.includes(seatNumber);
-
+  
         seats.push(
           <label key={`seat-${row}-${seat}`} className="seat-label">
             <input
@@ -49,17 +49,24 @@ const SeatSelection: React.FC = () => {
             <span className="checkbox">{seatNumber}</span>
           </label>
         );
+  
+        // Add extra spacing after the 2nd column
+        if (seat === 2) {
+          seats.push(<div key={`gap-${row}-${seat}`} className="column-gap" />);
+        }
       }
-
+  
       seatSelection.push(
         <div key={`row-${row}`} className="row-wrapper">
           <div className="seat-wrapper">{seats}</div>
         </div>
       );
     }
-
+  
     return seatSelection;
   };
+  
+  
 
   return (
     <div className="seat-selection-container">
