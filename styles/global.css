@@ -277,6 +277,7 @@ input[type='checkbox'] {
   width: 50x;
   padding: 2px; 
   box-sizing: border-box;
+
 }
 
 .seat-number {
@@ -284,29 +285,41 @@ input[type='checkbox'] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
 }
 
-input[type='checkbox'] + .seat-label {
-  background-color: white;
-  border: 1px solid grey;
-}
 
-input[type='checkbox']:checked + .seat-label {
-  background-color: #ff6701db;
-  border: 1px solid #ff6701db;
-}
-
-input[type='checkbox']:disabled + .seat-label {
-  background-color: grey;
-  border: 1px solid grey;
-}
 
 input[type='checkbox'] {
   margin-right: 5px;
-  height: 30px; 
-  width: 30px; 
   border-style: solid;
   margin-bottom: 5px;
-  border-radius: 50px;
+  appearance: none;
+  position: relative;
 }
 
+/**/
+:root {
+  --size: 1rem;
+  --border: 0.2rem;
+}
+.checkbox {
+  position: absolute;
+  height: var(--size);
+  border-radius: 5px;
+  border: var(--border) solid grey;
+  width: var(--size);
+  transition: 100ms ease-in;
+  cursor: pointer;
+
+}
+
+input:checked + .checkbox {
+  background: black;
+  border: var(--border) solid black;
+}
+
+input:checked + .dark {
+  background: white;
+  border: var(--border) solid white;
+}

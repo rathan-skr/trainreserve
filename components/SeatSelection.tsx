@@ -46,7 +46,7 @@ const SeatSelection: React.FC = () => {
               disabled={isPreselected}
               onChange={() => handleSeatSelection(seatNumber)}
             />
-            <span className="seat-number">{seatNumber}</span>
+            <span className="checkbox">{seatNumber}</span>
           </label>
         );
       }
