@@ -3,6 +3,8 @@ html {
 }
 :root {
   --background-white: #fff;
+  --size: 1rem;
+  --border: 0.2rem;
 }
 main {
   margin-top: 50px;
@@ -179,9 +181,9 @@ h3.main_h3 {
   margin-left: 10px;
 }
 .main_form_content input:focus {
-  border:#ff6801; 
+  border: #ff6801;
   outline: none;
-  background-color:  #f7f7f7;
+  background-color: #f7f7f7;
   border-style: solid;
   border-width: 1px;
 }
@@ -195,9 +197,8 @@ h3.main_h3 {
   margin-left: 10px;
 }
 .main_form_content button:active {
-  background-color:  #ff6701db; 
+  background-color: #ff6701db;
   box-shadow: inset 0px 0px 2px #150901;
-  
 }
 @media (max-width: 1024px) {
   .main_form {
@@ -227,7 +228,6 @@ h3.main_h3 {
   }
 }
 
-
 .seat-selection-container {
   display: flex;
   flex-direction: column;
@@ -255,7 +255,6 @@ h3.main_h3 {
 .seat-wrapper {
   display: flex;
   flex-direction: column;
-  
 }
 
 label {
@@ -264,7 +263,7 @@ label {
   align-items: center;
 }
 
-input[type='checkbox'] {
+input[type="checkbox"] {
   margin-right: 5px;
 }
 
@@ -275,8 +274,10 @@ input[type='checkbox'] {
   align-items: center;
   height: 40px;
   width: 50x;
-  padding: 2px; 
+  padding: 2px;
   box-sizing: border-box;
+  font: 0.5em sans-serif;
+
 
 }
 
@@ -285,24 +286,15 @@ input[type='checkbox'] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
 }
 
-
-
-input[type='checkbox'] {
+input[type="checkbox"] {
   margin-right: 5px;
-  border-style: solid;
   margin-bottom: 5px;
   appearance: none;
   position: relative;
 }
 
-/**/
-:root {
-  --size: 1rem;
-  --border: 0.2rem;
-}
 .checkbox {
   position: absolute;
   height: var(--size);
@@ -311,12 +303,17 @@ input[type='checkbox'] {
   width: var(--size);
   transition: 100ms ease-in;
   cursor: pointer;
+  border-width: 0.01rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
 }
 
 input:checked + .checkbox {
-  background: black;
-  border: var(--border) solid black;
+  background: #ff6701db;
+  border: var(--border) solid #ff6701db;
+  border-width: 0.01rem;
 }
 
 input:checked + .dark {
