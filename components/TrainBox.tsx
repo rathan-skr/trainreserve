@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useSwipeable } from 'react-swipeable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from 'react';
+import { useSwipeable } from 'react-swipeable';
 
 interface SeatSelectionBoxProps {
   data: {
@@ -84,20 +84,15 @@ const SeatSelectionBox: React.FC<SeatSelectionBoxProps> = ({
     onSelectionChange(name, selectedSeats);
   }, [name, selectedSeats, onSelectionChange]);
 
-  const handlers = useSwipeable({
-    onSwipedLeft: () => console.log('Swiped Left'), // Add your own swipe left action
-    onSwipedRight: () => console.log('Swiped Right'), // Add your own swipe right action
-  });
-
   return (
-    <div className="seat-selection-container" {...handlers}>
+    <div className="seat-selection-container">
       <h3 className="main_form_h3">Select Seats - {name}</h3>
       <div className="seat-selection-wrapper">{renderSeatSelection()}</div>
     </div>
   );
 };
 
-const TrainBoxComponent: React.FC = () => {
+const ParentComponent: React.FC = () => {
   const [selectedSeatsData, setSelectedSeatsData] = useState<{ [name: string]: string[] }>({});
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const seatSelectionData = [
@@ -105,6 +100,7 @@ const TrainBoxComponent: React.FC = () => {
     { name: 'B', rows: 8, seatsPerRow: 4, spacingColumn: 2 },
     { name: 'C', rows: 10, seatsPerRow: 5, spacingColumn: 2 },
   ];
+  const preselectedSeats = ['A-1', 'B-12', 'C-23'];
 
   const handleSelectionChange = (name: string, selectedSeats: string[]) => {
     setSelectedSeatsData((prevSelectedSeatsData) => ({
@@ -112,6 +108,22 @@ const TrainBoxComponent: React.FC = () => {
       [name]: selectedSeats,
     }));
   };
+
+  const handleSwipe = (delta: number) => {
+    const newIndex = currentIndex + delta;
+
+    if (newIndex >= 0 && newIndex < seatSelectionData.length) {
+      setCurrentIndex(newIndex);
+    }
+  };
+
+  const isFirstBox = currentIndex === 0;
+  const isLastBox = currentIndex === seatSelectionData.length - 1;
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => handleSwipe(1),
+    onSwipedRight: () => handleSwipe(-1),
+  });
 
   useEffect(() => {
     const formattedSelectedSeats: string[] = [];
@@ -124,37 +136,31 @@ const TrainBoxComponent: React.FC = () => {
     console.log(formattedSelectedSeats);
   }, [selectedSeatsData]);
 
-  const handleSwipe = (delta: number) => {
-    const newIndex = currentIndex + delta;
-
-    if (newIndex >= 0 && newIndex < seatSelectionData.length) {
-      setCurrentIndex(newIndex);
-    }
-  };
-
-  const preselectedSeats = ['A-1', 'B-12', 'C-23'];
-
   return (
-    <div>
-      <div className="swipe-box">
-        <div className="swipe-button" onClick={() => handleSwipe(-1)}>
-        <FontAwesomeIcon icon={faChevronLeft} />
-        </div>
-        <div className="seat-selection-box">
-          <SeatSelectionBox
-            data={seatSelectionData[currentIndex]}
-            preselectedSeats={preselectedSeats.filter((seat) =>
-              seat.startsWith(seatSelectionData[currentIndex].name + '-')
-            )}
-            onSelectionChange={handleSelectionChange}
-          />
-        </div>
-        <div className="swipe-button" onClick={() => handleSwipe(1)}>
-        <FontAwesomeIcon icon={faChevronRight} /> 
-        </div>
+    <div className="swipe-box" {...handlers}>
+      <div
+        className={`swipe-button ${isFirstBox ? 'disabled' : ''}`}
+        onClick={() => handleSwipe(-1)}
+      >
+        <FontAwesomeIcon icon={faChevronLeft} className={isFirstBox ? 'disabled' : ''} />
+      </div>
+      <div className="seat-selection-box">
+        <SeatSelectionBox
+          data={seatSelectionData[currentIndex]}
+          preselectedSeats={preselectedSeats.filter((seat) =>
+            seat.startsWith(seatSelectionData[currentIndex].name + '-')
+          )}
+          onSelectionChange={handleSelectionChange}
+        />
+      </div>
+      <div
+        className={`swipe-button ${isLastBox ? 'disabled' : ''}`}
+        onClick={() => handleSwipe(1)}
+      >
+        <FontAwesomeIcon icon={faChevronRight} className={isLastBox ? 'disabled' : ''} />
       </div>
     </div>
   );
 };
 
-export default TrainBoxComponent;
+export default ParentComponent;

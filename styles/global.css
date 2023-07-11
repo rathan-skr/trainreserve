@@ -355,3 +355,19 @@ input:disabled + .checkbox {
   align-self: center;
 
 }
+.swipe-button.disabled {
+  color: grey;
+  cursor: not-allowed;
+
+}
+.swipe-button.disabled:hover {
+  color: grey;
+  cursor: not-allowed;
+  background-color:  rgba(128, 128, 128, 0.121);
+  border-radius:100%;
+}
+.swipe-button:hover {
+  color: #ff6701db;
+  background-color: #e866102f;
+  border-radius:100%;
+}
