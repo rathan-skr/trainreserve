@@ -60,7 +60,7 @@ img.navigation_image {
   height: 40px;
 }
 .main_image_container {
-  position: relative;
+  position: absolute;
   width: 100%;
 }
 .main_image {
@@ -141,10 +141,12 @@ h3.main_h3 {
 }
 .main_container {
   height: 1400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
 }
 .main_form {
-  position: absolute;
   background-color: var(--background-white);
   width: 100%;
   font: 1em sans-serif;
@@ -152,13 +154,12 @@ h3.main_h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: auto;
-  margin-right: auto;
   transition: box-shadow 0.3s ease;
   max-width: 1024px;
-  transform: translate(25%, -30%);
+  transform: translate(0%, 80%);
   border-radius: 5px;
   z-index: 10;
+  margin-bottom: 360px;
 }
 .main_form_content {
   background-color: var(--background-white);
@@ -179,6 +180,15 @@ h3.main_h3 {
   border-radius: 5px;
   margin-bottom: 10px;
   margin-left: 10px;
+}
+.depature input {
+  width: 150px;
+}
+.return input {
+  width: 150px;
+}
+.seats input {
+  width: 75px;
 }
 .main_form_content input:focus {
   border: #ff6801;
@@ -205,8 +215,6 @@ h3.main_h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-
 }
 
 .seat-selection-wrapper {
@@ -298,7 +306,8 @@ input:disabled + .checkbox {
     width: 100%;
     font: 1em sans-serif;
     height: "50px";
-    transform: translate(0%, 0%);
+    transform: translate(0%, 175px);
+    margin-bottom: 178px;
   }
   .main_form_content {
     background-color: var(--background-white);
@@ -312,7 +321,7 @@ input:disabled + .checkbox {
     padding: 8px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    width:315px;
+    width: 315px;
     height: 50px;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -321,13 +330,12 @@ input:disabled + .checkbox {
   }
   input[type="checkbox"] {
     margin: 15px;
-    
   }
   .checkbox {
     height: 2rem;
     border-radius: 5px;
     border: var(--border) solid grey;
-    width:2rem;
+    width: 2rem;
     border-width: 0.01rem;
     font: 1rem sans-serif;
   }
@@ -340,34 +348,42 @@ input:disabled + .checkbox {
   display: flex;
   align-items: center;
   justify-content: space-ar;
- 
 }
 
 .swipe-button {
   font-size: 24px;
   padding: 8px;
   cursor: pointer;
-  margin: 0 10px; 
+  margin: 0 10px;
 }
 
 .seat-selection-box {
   width: 450px;
   align-self: center;
-
 }
 .swipe-button.disabled {
   color: grey;
   cursor: not-allowed;
-
 }
 .swipe-button.disabled:hover {
   color: grey;
   cursor: not-allowed;
-  background-color:  rgba(128, 128, 128, 0.121);
-  border-radius:100%;
+  background-color: rgba(128, 128, 128, 0.121);
+  border-radius: 100%;
 }
 .swipe-button:hover {
   color: #ff6701db;
   background-color: #e866102f;
-  border-radius:100%;
+  border-radius: 100%;
+}
+.card_form {
+  z-index: 10;
+  width: 100%;
+  font: 1em sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1024px;
+  z-index: 10;
+ 
 }

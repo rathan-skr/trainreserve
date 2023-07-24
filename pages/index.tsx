@@ -4,6 +4,7 @@ import React from "react";
 
 const Home: React.FC = () => {
   return (
+    
     <div className="main_container">
       <div className="main_image_container">
         <div className="image_overlay">
@@ -32,12 +33,20 @@ const Home: React.FC = () => {
           <div className="depature">
             <input placeholder="Depature" />
           </div>
+          <div className="return">
+            <input placeholder="Return" />
+          </div>
           <div className="seats">
             <input placeholder="Seats" />
           </div>
           <button>Check Availabilty</button>
         </div>
-        <TrainBoxComponent/>
+        <div className="train_box">
+        <TrainBoxComponent/> 
+        </div>
+      </div>
+      <div className="card_form">
+           idci
       </div>
     </div>
   );
