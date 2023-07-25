@@ -102,12 +102,28 @@ const ParentComponent: React.FC = () => {
   ];
   const preselectedSeats = ['A-1', 'B-12', 'C-23'];
 
+  // const handleSelectionChange = (name: string, selectedSeats: string[]) => {
+  //   setSelectedSeatsData((prevSelectedSeatsData) => ({
+  //     ...prevSelectedSeatsData,
+  //     [name]: selectedSeats,
+  //   }));
+  // };
   const handleSelectionChange = (name: string, selectedSeats: string[]) => {
-    setSelectedSeatsData((prevSelectedSeatsData) => ({
-      ...prevSelectedSeatsData,
-      [name]: selectedSeats,
-    }));
+    setSelectedSeatsData((prevSelectedSeatsData) => {
+      // Check if the new selection is different from the previous one
+      if (JSON.stringify(prevSelectedSeatsData[name]) === JSON.stringify(selectedSeats)) {
+        // If it's the same, return the previous state to avoid unnecessary updates
+        return prevSelectedSeatsData;
+      }
+  
+      // If it's different, update the selected seats data
+      return {
+        ...prevSelectedSeatsData,
+        [name]: selectedSeats,
+      };
+    });
   };
+  
 
   const handleSwipe = (delta: number) => {
     const newIndex = currentIndex + delta;
