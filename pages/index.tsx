@@ -1,5 +1,6 @@
 import SeatSelection from "@/components/SeatSelection";
 import TrainBoxComponent from "@/components/TrainBox";
+import withAuth from "@/components/withAuth";
 import React from "react";
 
 const Home: React.FC = () => {
@@ -52,4 +53,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default withAuth(Home);
