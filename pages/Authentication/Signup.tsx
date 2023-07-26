@@ -19,23 +19,37 @@ const SignupPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Signup</h1>
-      <form onSubmit={handleSignup}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Signup</button>
-      </form>
+   <div className="login_form">
+      <h3 className="main_form_h3">Signup</h3>
+      <div className="main_form_content">
+        <form onSubmit={handleSignup}>
+          <div className="row">
+            {" "}
+            <h5>Email :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="row">
+            <h5>Password :</h5>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="button_content" >
+            <button type="submit" className="button">
+              Signup
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

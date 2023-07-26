@@ -5,7 +5,8 @@ import { useAuth } from "@/utils/auth";
 import React from "react";
 
 const Home: React.FC = () => {
-const { user, logout } = useAuth();console.log("home ..........",user);
+const { user, logout } = useAuth();
+console.log("home ..........",user);
   return (
     
     <div className="main_container">
