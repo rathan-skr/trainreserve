@@ -10,6 +10,7 @@ const firebaseConfig = {
   storageBucket: "travelzara-8d93b.appspot.com",
   messagingSenderId: "379483541994",
   measurementId: "G-QYDPZL0NS7",
+  persistence: 'local',
 };
 
 // Initialize Firebase

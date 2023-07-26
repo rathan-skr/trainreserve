@@ -31,7 +31,13 @@ export const useAuth = () => {
       throw error;
     }
   };
-
+   const checkAuth = () => {
+    return new Promise((resolve) => {
+      firebase.auth().onAuthStateChanged((user) => {
+        resolve(user);
+      });
+    });
+  };
   firebase.auth().onAuthStateChanged((authUser:any) => {
     if (authUser) {
       setUser(authUser);
@@ -45,6 +51,7 @@ export const useAuth = () => {
     signup,
     login,
     logout,
+    checkAuth
   };
 };
 

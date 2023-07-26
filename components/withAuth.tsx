@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../utils/auth";
 
-const withAuth = (WrappedComponent:any) => {
-  const AuthenticatedComponent = (props:any) => {
+const withAuth = (WrappedComponent: any) => {
+  const AuthenticatedComponent = (props: any) => {
     const { user } = useAuth();
     const router = useRouter();
 

@@ -1,9 +1,11 @@
 import SeatSelection from "@/components/SeatSelection";
 import TrainBoxComponent from "@/components/TrainBox";
 import withAuth from "@/components/withAuth";
+import { useAuth } from "@/utils/auth";
 import React from "react";
 
 const Home: React.FC = () => {
+const { user, logout } = useAuth();console.log("home ..........",user);
   return (
     
     <div className="main_container">
@@ -47,10 +49,16 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div className="card_form">
-           idci
+      {user ? (
+        <><div> {user?.["email"]}</div>
+        <button onClick={() => logout()}>Logout</button></>
+      
+      ) : (
+        <p>Please login to see the content</p>
+      )}
       </div>
     </div>
   );
 };
 
-export default withAuth(Home);
+export default (Home);

@@ -1,5 +1,7 @@
 // pages/login.tsx
 import { useAuth } from '@/utils/authProvider';
+import { useRouter } from 'next/router';
+
 import React, { useState } from 'react';
 
 
@@ -7,12 +9,13 @@ const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const router = useRouter();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
       // Redirect or perform other actions after successful login
+      router.replace('/'); 
     } catch (error) {
       // Handle login error
     }
