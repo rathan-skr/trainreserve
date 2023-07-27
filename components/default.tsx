@@ -19,6 +19,9 @@ const DefaultLayout: React.FC = ({ children }: any) => {
             <li className="navigation_items">Destinations</li>
             <li className="navigation_items">Offers</li>
           </ul>
+          <div className="navigation_logo">
+            <img className="navigation_image" src="User.png" alt="Logo" />
+          </div>
           <ul className="navigation_group navigation_aside_shortcut"></ul>
         </nav>
       </header>

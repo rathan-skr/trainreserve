@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<props> = ({ children }: props) => {
   useEffect(() => {
     const checkSimultaneousLogins = async () => {
       const tokensString = localStorage.getItem("authTokens");
-       console.log("tokensString",tokensString);
+      console.log("tokensString", tokensString);
       if (tokensString) {
         const tokens: string[] = JSON.parse(tokensString);
         try {
@@ -95,8 +95,7 @@ export const AuthProvider: React.FC<props> = ({ children }: props) => {
         const userToken = await currentUser.getIdToken();
         setUserTokensLocalStorage([...tokens, userToken]);
         setUser(currentUser);
-        console.log("tokensString",tokensString,userToken);
-        
+        console.log("tokensString", tokensString, userToken);
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -117,8 +116,6 @@ export const AuthProvider: React.FC<props> = ({ children }: props) => {
         const userToken = await currentUser.getIdToken();
         setUserTokensLocalStorage([...tokens, userToken]);
         setUser(currentUser);
-       
-        
       }
     } catch (error) {
       console.error("Signup error:", error);
@@ -131,7 +128,11 @@ export const AuthProvider: React.FC<props> = ({ children }: props) => {
     await firebase.auth().signOut();
   };
   if (loading) {
-    return <div>Loading...</div>; // Show a loading indicator until the initial auth state is loaded
+    return (
+      <div className="loading-container">
+        <div id="loading-dot"></div>
+      </div>
+    );
   }
 
   return (
