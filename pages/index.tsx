@@ -5,7 +5,6 @@ import { useAuth } from "@/utils/auth";
 import React, { useState } from "react";
 
 const Home: React.FC = () => {
-
   const [isChecked, setIsChecked] = useState(false);
 
   return (
@@ -36,23 +35,23 @@ const Home: React.FC = () => {
           </div>
           <div className="depature">
             <div className="depature_input">
-            <input placeholder="Depature" /> 
-         </div>
-         <div className="check">
-            <label>Return?</label>
-            <input
-              type="checkbox"
-              className="custom-checkbox"
-              checked={isChecked}
-              onChange={() => setIsChecked(!isChecked)}
-            /> 
+              <input type="date" placeholder="Depature" />
+            </div>
+            <div className="check">
+              <label>Return?</label>
+              <input
+                type="checkbox"
+                className="custom-checkbox"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+              />
+            </div>
           </div>
-
-          </div>
-       
-         {   isChecked&&(<div className="return">
-            <input placeholder="Return" />
-          </div>)}
+          {isChecked && (
+            <div className="return">
+              <input type="date" placeholder="Return" />
+            </div>
+          )}
           <div className="seats">
             <input placeholder="Seats" />
           </div>
