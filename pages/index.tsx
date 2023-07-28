@@ -2,13 +2,13 @@ import SeatSelection from "@/components/SeatSelection";
 import TrainBoxComponent from "@/components/TrainBox";
 import withAuth from "@/components/withAuth";
 import { useAuth } from "@/utils/auth";
-import React from "react";
+import React, { useState } from "react";
 
 const Home: React.FC = () => {
-const { user, logout } = useAuth();
-console.log("home ..........",user);
+
+  const [isChecked, setIsChecked] = useState(false);
+
   return (
-    
     <div className="main_container">
       <div className="main_image_container">
         <div className="image_overlay">
@@ -35,31 +35,35 @@ console.log("home ..........",user);
             <input placeholder="To" />
           </div>
           <div className="depature">
-            <input placeholder="Depature" />
+            <div className="depature_input">
+            <input placeholder="Depature" /> 
+         </div>
+         <div className="check">
+            <label>Return?</label>
+            <input
+              type="checkbox"
+              className="custom-checkbox"
+              checked={isChecked}
+              onChange={() => setIsChecked(!isChecked)}
+            /> 
           </div>
-          <div className="return">
+
+          </div>
+       
+         {   isChecked&&(<div className="return">
             <input placeholder="Return" />
-          </div>
+          </div>)}
           <div className="seats">
             <input placeholder="Seats" />
           </div>
           <button>Check Availabilty</button>
         </div>
         <div className="train_box">
-        <TrainBoxComponent/> 
+          <TrainBoxComponent />
         </div>
-      </div>
-      <div className="card_form">
-      {user ? (
-        <><div> {user?.["email"]}</div>
-        <button onClick={() => logout()}>Logout</button></>
-      
-      ) : (
-        <p>Please login to see the content</p>
-      )}
       </div>
     </div>
   );
 };
 
-export default (Home);
+export default Home;

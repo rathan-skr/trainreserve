@@ -54,11 +54,13 @@ header {
   height: 40px;
   border-radius: 25px;
 }
+
 img.navigation_image {
   border-radius: 10px;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
+
 .main_image_container {
   position: absolute;
   width: 100%;
@@ -167,7 +169,7 @@ h3.main_h3 {
   display: flex;
   flex-direction: row;
   text-align: center;
-  align-items: center;
+  
 }
 .main_form:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -180,7 +182,7 @@ h3.main_h3 {
   width: 200px;
   height: 50px;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   margin-left: 10px;
 }
 .depature input {
@@ -387,7 +389,6 @@ input:disabled + .checkbox {
   align-items: center;
   max-width: 1024px;
   z-index: 10;
- 
 }
 /* global.css */
 .login_form {
@@ -416,19 +417,15 @@ input:disabled + .checkbox {
   flex-direction: row;
   margin-bottom: 10px;
   align-items: center;
-  
- 
 }
 .row h5 {
   /* Assuming h5 elements within .row div */
   margin-right: 10px;
   padding-right: 10px;
-  
 }
 .button {
   text-align: center;
   cursor: pointer;
- 
 }
 .loading-container {
   width: 100%;
@@ -458,7 +455,11 @@ input:disabled + .checkbox {
 #loading-dot {
   width: 120px;
   height: 60px;
-  background-image: radial-gradient(circle, var(--dot-color) 50%, transparent 50%),
+  background-image: radial-gradient(
+      circle,
+      var(--dot-color) 50%,
+      transparent 50%
+    ),
     radial-gradient(circle, var(--dot-color) 50%, transparent 50%),
     radial-gradient(circle, var(--dot-color) 50%, transparent 50%);
   background-size: var(--dot-size) var(--dot-size);
@@ -468,7 +469,10 @@ input:disabled + .checkbox {
 }
 
 @keyframes loading {
-  0%, 33.34%, 66.68%, 100% {
+  0%,
+  33.34%,
+  66.68%,
+  100% {
     background-position: 0% 50%, 50% 50%, 100% 50%;
   }
   16.67% {
@@ -480,4 +484,134 @@ input:disabled + .checkbox {
   83.35% {
     background-position: 0% 50%, 50% 50%, 100% var(--dot-jump);
   }
+}
+/* Styles for user_logo */
+.user_logo {
+  padding-right: 30px;
+  border-bottom: 5px solid #0000;
+  border-top: 5px solid #0000;
+  width: 20px;
+  height: 20px;
+  border-radius: 25px;
+  transition: border-color 0.3s ease; /* Add transition for smooth effect */
+  right: 0;
+}
+
+/* Styles for user_image */
+img.user_image {
+  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  transition: transform 0.3s ease; /* Add transition for smooth effect */
+  cursor: pointer;
+  right: 0;
+}
+
+/* Hover effect for user_image */
+img.user_image:hover {
+  transform: scale(1); /* Increase the image size on hover */
+}
+
+/* Active (mouse-over) effect for user_image */
+img.user_image:active {
+  transform: scale(0.9); /* Decrease the image size on mouse click */
+}
+/* Styles for the user options box */
+.user_options_box {
+  display: none; /* Hidden by default */
+  position: absolute;
+  position: fixed;
+  top: 6%;
+  right: 5px;
+  background-color: var(--background-white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.user_options_box.show {
+  display: block; /* Show when the show class is added */
+  z-index: 20;
+}
+
+.user_options_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user_option_item {
+  cursor: pointer;
+  padding: 6px 12px;
+  border-bottom: 2px solid #ccc;
+}
+/* Add hover styles for the "Logout" item */
+.user_option_itemt:hover {
+  background-color: #f5f5f5;
+  border-bottom: 2px solid #161616d5;
+}
+
+/* Add onclick styles for the "Logout" item */
+.user_option_item:active {
+  border-bottom: 2px solid #161616;
+}
+
+/* Custom style for the specific checkbox */
+input.custom-checkbox {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: relative;
+  width: 2px;
+  height: 2px;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Custom checkbox shape */
+input.custom-checkbox::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  width: 14px;
+  height: 14px;
+  background-color: #ff6701db; /* Change to your desired color */
+  border-radius: 2px;
+  opacity: 0;
+}
+
+/* Show the custom checkbox when it's checked */
+input.custom-checkbox:checked::before {
+  opacity: 1;
+}
+
+/* Style the checkbox label */
+input.custom-checkbox + label {
+  margin-left: 2px; /* Adjust spacing between checkbox and label */
+}
+.check {
+  display: flex;
+  flex-direction: row;
+  
+ padding-left: 100px;
+ padding-bottom: 10px;
+ 
+}
+.depature {
+  display: flex;
+  flex-direction: column;
+}
+.depature_input {
+  display: flex;
+  flex-direction: row;
+
+  /* Adjust spacing between "Depature" input and checkbox */
+}
+input.custom-checkbox {
+  margin: 0px;
 }

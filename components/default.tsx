@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const DefaultLayout: React.FC = ({ children }: any) => {
   return (
@@ -18,12 +18,9 @@ const DefaultLayout: React.FC = ({ children }: any) => {
           <ul className="navigation_group navigation_aside">
             <li className="navigation_items">Destinations</li>
             <li className="navigation_items">Offers</li>
-          </ul>
-          <div className="navigation_logo">
-            <img className="navigation_image" src="User.png" alt="Logo" />
-          </div>
+          </ul> 
           <ul className="navigation_group navigation_aside_shortcut"></ul>
-        </nav>
+        </nav>{" "}
       </header>
       <main>{children}</main>
       <footer>{/* Footer content */}</footer>
@@ -32,3 +29,21 @@ const DefaultLayout: React.FC = ({ children }: any) => {
 };
 
 export default DefaultLayout;
+
+
+{/* <div className="user_logo">
+  <img
+    className="user_image"
+    src="https://cdn-icons-png.flaticon.com/128/3033/3033143.png"
+    alt="Logo"
+  />
+  <div className="card_form">
+    {user ? (
+      <>
+        <div> {user?.["email"]}</div>
+      </>
+    ) : (
+      <p>Please login to see the content</p>
+    )}
+  </div>
+</div> */}
