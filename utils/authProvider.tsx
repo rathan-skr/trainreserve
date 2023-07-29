@@ -1,5 +1,11 @@
-import firebase from "@/firebase/firebaseConfig";
+import firebase from "@/firebase/firebase";
+import firebaseConfig from "@/firebase/firebaseConfig";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 import router from "next/router";
+import { collection, doc, setDoc, updateDoc, addDoc } from "firebase/firestore";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 import React, {
   Component,
   ReactNode,
@@ -263,27 +269,29 @@ export const AuthProvider: React.FC<props> = ({ children }: props) => {
     );
 
     try {
-      console.log("Train schedule added successfully.",trainID);
-      // Assuming you have a Firestore collection called "trainSchedules"
-      const trainSchedulesRef = firebase
-        .firestore()
-        .collection("trainSchedules");
+      // console.log("Train schedule added successfully.", trainID);
+      // // Assuming you have a Firestore collection called "trainSchedules"
 
-      // Add the train schedule document
-      const newTrainScheduleRef = await trainSchedulesRef.add({
-        trainID,
-        trainName,
-        stoppingLocations,
-        date,
-        departureTime,
-        arrivalTime,
-        delay,
-        currentLocation,
+      // const trainSchedulesRef = collection(db, "trainSchedules");
+      // // Add the train schedule document
+      // const newTrainScheduleRef = await addDoc(trainSchedulesRef, {
+        // trainID,
+        // trainName,
+        // stoppingLocations,
+        // date,
+        // departureTime,
+        // arrivalTime,
+        // delay,
+        // currentLocation,
+      // });
+      // const newTrainScheduleID = newTrainScheduleRef.id;
+      // // Do something with the newTrainScheduleID if needed
+      // console.log("New train schedule ID:", newTrainScheduleID);
+      await setDoc(doc(db, "trainSchedules"), {
+        name: "Yarl devi",
+        trainID: "kks 101",
+        date: "12.02.2023"
       });
-      const newTrainScheduleID = newTrainScheduleRef.id;
-
-      // Do something with the newTrainScheduleID if needed
-      console.log("New train schedule ID:", newTrainScheduleID);
     } catch (error) {
       console.error("Error adding train schedule:", error);
       throw error;

@@ -178,7 +178,7 @@ h3.main_h3 {
   padding: 8px;
   border: 1px solid #ccc;
   box-sizing: border-box;
-  width: 200px;
+  width: 150px;
   height: 50px;
   border-radius: 5px;
   margin-bottom: 5px;
@@ -614,4 +614,96 @@ input.custom-checkbox + label {
 }
 input.custom-checkbox {
   margin: 0px;
+}
+.schedule_form_content {
+  background-color: var(--background-white);
+  height: "50px";
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.schedule_form:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.schedule_form_content input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  width: 200px;
+  height: 50px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+  font: 1em sans-serif;
+}
+.depature input {
+  width: 150px;
+}
+.return input {
+  width: 150px;
+}
+.seats input {
+  width: 75px;
+}
+.schedule_form_content input:focus {
+  border: #ff6801;
+  outline: none;
+  background-color: #f7f7f7;
+  border-style: solid;
+  border-width: 1px;
+}
+.schedule_form_content button {
+  width: 120px;
+  height: 50px;
+  background-color: #ff6801;
+  border-radius: 5px;
+  border-style: none;
+  color: var(--background-white);
+  margin-left: 10px;
+}
+.schedule_form_content button:active {
+  background-color: #ff6701db;
+  box-shadow: inset 0px 0px 2px #150901;
+}
+.schedule_form_content input:focus {
+  border: #ff6801;
+  outline: none;
+  background-color: #f7f7f7;
+  border-style: solid;
+  border-width: 1px;
+}
+.schedule_form_content button {
+  width: 120px;
+  height: 50px;
+  background-color: #ff6801;
+  border-radius: 5px;
+  border-style: none;
+  color: var(--background-white);
+  margin-left: 10px;
+}
+.schedule_form_content button:active {
+  background-color: #ff6701db;
+  box-shadow: inset 0px 0px 2px #150901;
+}
+.schedule_form {
+  background-color: var(--background-white);
+  width: 100%;
+  font: 1em sans-serif;
+  height: auto; /* Remove the quotes around 50px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.3s ease;
+  max-width: 1024px;
+  position:relative;
+
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border-radius: 5px;
+  z-index: 10;
+ 
+}
+.schedule_form:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }

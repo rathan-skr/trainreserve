@@ -2,11 +2,51 @@ import SeatSelection from "@/components/SeatSelection";
 import TrainBoxComponent from "@/components/TrainBox";
 import withAuth from "@/components/withAuth";
 import { useAuth } from "@/utils/auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
+import firebaseConfig from "@/firebase/firebaseConfig";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  setDoc,
+  updateDoc,
+  addDoc,
+  getDocs,
+} from "firebase/firestore";
+interface TravelData {
+  id: string;
+}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const Home: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);
+  const [travelDataArray, setTravelDataArray] = useState<TravelData[]>([]);
+  console.log("travelDataArray", travelDataArray);
 
+  const loadTravelData = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "trainSchedules"));
+      const data = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTravelDataArray(data);
+    } catch (error) {
+      console.error("Error loading travel data:", error);
+    }
+  };
+  const loadStationData = async () => {
+    const querySnapshot = await getDocs(collection(db, "Stations"));
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+    });
+  };
+  useEffect(() => {
+    loadTravelData();
+    loadStationData();
+  }, []);
   return (
     <div className="main_container">
       <div className="main_image_container">
@@ -33,7 +73,7 @@ const Home: React.FC = () => {
           <div className="to">
             <input placeholder="To" />
           </div>
-          <div className="depature">
+          <div className="">
             <div className="depature_input">
               <input type="date" placeholder="Depature" />
             </div>
@@ -48,7 +88,7 @@ const Home: React.FC = () => {
             </div>
           </div>
           {isChecked && (
-            <div className="return">
+            <div className="depature_input">
               <input type="date" placeholder="Return" />
             </div>
           )}
