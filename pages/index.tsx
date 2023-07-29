@@ -29,7 +29,7 @@ const Home: React.FC = () => {
   const [stationToID, setStationToID] = useState(0);
   const [stationToName, setStationToName] = useState("");
   console.log("travelDataArray", travelDataArray);
-  console.log("stations",stationFromID,stationToID);
+  console.log("stations", stationFromID, stationToID);
 
   const loadTravelData = async () => {
     try {
@@ -135,8 +135,16 @@ const Home: React.FC = () => {
         <div className="train_box">
           <TrainBoxComponent />
         </div>
+        <div className="train_cards">
+          <TravelCard />
+          <TravelCard />
+          <TravelCard />
+          <TravelCard />
+          <TravelCard />
+          <TravelCard />
+          
+        </div>
       </div>
-   
     </div>
   );
 };
