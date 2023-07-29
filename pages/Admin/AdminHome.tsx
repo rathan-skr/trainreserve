@@ -1,4 +1,5 @@
 import TrainTimeTableForm from "@/components/TrainScedule";
+import withAuth from "@/components/withAuth";
 import React from "react";
 
 
@@ -13,4 +14,4 @@ const MainComponent: React.FC = () => {
   );
 };
 
-export default MainComponent;
+export default withAuth(MainComponent);

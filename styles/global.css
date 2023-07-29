@@ -864,7 +864,7 @@ input.custom-checkbox {
   & > .button-favorite {
     width: 2.8em;
     height: 2.8em;
-    display: none;
+    /* display: none; */
     justify-content: center;
     align-items: center;
     position: absolute;
@@ -877,7 +877,7 @@ input.custom-checkbox {
     user-select: none;
 
     &:hover > :first-child {
-      display: none;
+      /* display: none; */
     }
 
     &:hover > :last-child {
@@ -890,7 +890,7 @@ input.custom-checkbox {
     }
 
     & > :last-child {
-      display: none;
+      /* display: none; */
       color: #ff5a60;
     }
   }

@@ -6,6 +6,7 @@ import firebaseConfig from "@/firebase/firebaseConfig";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { collection, doc, setDoc, updateDoc, addDoc } from "firebase/firestore";
+import withAuth from "./withAuth";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const TrainTimeTableForm: React.FC = () => {
@@ -271,4 +272,4 @@ const TrainTimeTableForm: React.FC = () => {
   );
 };
 
-export default TrainTimeTableForm;
+export default withAuth(TrainTimeTableForm);
