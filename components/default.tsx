@@ -1,4 +1,4 @@
-import { useAuth } from "@/utils/auth";
+
 import React, { useState } from "react";
 
 const DefaultLayout: React.FC = ({ children }: any) => {

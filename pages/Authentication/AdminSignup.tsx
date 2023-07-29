@@ -2,7 +2,7 @@
 import { useAuth } from "@/utils/authProvider";
 import React, { useState } from "react";
 
-const adminSignupPage: React.FC = () => {
+const AdminSignupPage = () => {
   const { adminSignup } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,4 +63,4 @@ const adminSignupPage: React.FC = () => {
   );
 };
 
-export default adminSignupPage;
+export default AdminSignupPage;

@@ -1,7 +1,8 @@
 // components/withAuth.tsx
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "../utils/auth";
+import { useAuth } from "@/utils/authProvider";
+
 
 const withAuth = (WrappedComponent: any) => {
   const AuthenticatedComponent = (props: any) => {

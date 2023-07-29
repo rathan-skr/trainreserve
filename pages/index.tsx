@@ -1,7 +1,6 @@
 import SeatSelection from "@/components/SeatSelection";
 import TrainBoxComponent from "@/components/TrainBox";
 import withAuth from "@/components/withAuth";
-import { useAuth } from "@/utils/auth";
 import React, { useEffect, useState } from "react";
 
 import firebaseConfig from "@/firebase/firebaseConfig";
