@@ -136,13 +136,9 @@ const Home: React.FC = () => {
           <TrainBoxComponent />
         </div>
         <div className="train_cards">
-          <TravelCard />
-          <TravelCard />
-          <TravelCard />
-          <TravelCard />
-          <TravelCard />
-          <TravelCard />
-          
+          {travelDataArray.map((item, index) => (
+        <TravelCard key={index} data={item} />
+      ))}
         </div>
       </div>
     </div>

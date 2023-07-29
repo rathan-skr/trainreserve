@@ -15,11 +15,13 @@ const TrainTimeTableForm: React.FC = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [stoppingLocations, setStoppingLocations] = useState<string[]>([]);
+  const [classes, setClasses] = useState<string[]>([]);
   const [date, setDate] = useState("");
   const [departureTime, setDepartureTime] = useState("");
   const [arrivalTime, setArrivalTime] = useState("");
   const [delay, setDelay] = useState("");
   const [currentLocation, setCurrentLocation] = useState("");
+  const[seatAvailable,setSeatAvailable]=useState<boolean>(false);
 
   const handleTrainIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTrainID(event.target.value);
@@ -49,7 +51,15 @@ const TrainTimeTableForm: React.FC = () => {
     );
     setStoppingLocations(selectedOptions);
   };
-
+  const handleClassChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedOptions = Array.from(
+      event.target.selectedOptions,
+      (option) => option.value
+    );
+    setClasses(selectedOptions);
+  };
   const handleDepartureTimeChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -73,7 +83,9 @@ const TrainTimeTableForm: React.FC = () => {
   ) => {
     setCurrentLocation(event.target.value);
   };
-
+  const handleseatAvailableChange = () => {
+    setSeatAvailable((prevValue) => !prevValue); // Toggle the value between true and false
+  };
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
@@ -96,7 +108,9 @@ const TrainTimeTableForm: React.FC = () => {
         delay,
         currentLocation,
         from,
-        to
+        to,
+        seatAvailable,
+        classes
       });
       // Clear the form after successful submission
       setTrainID("");
@@ -183,6 +197,21 @@ const TrainTimeTableForm: React.FC = () => {
           </select>
         </div>
         <div className="row">
+          <label htmlFor="classes">Classes:</label>
+          <select
+            id="classes"
+            multiple
+            value={classes}
+            onChange={handleClassChange}
+            required
+          >
+            <option value="1st class">1st class</option>
+            <option value="2nd class">2nd class</option>
+            <option value="3rd class">3rd class</option>
+            {/* Add more options as needed */}
+          </select>
+        </div>
+        <div className="row">
           <label htmlFor="departureTime">Departure Time:</label>
           <input
             type="time"
@@ -222,6 +251,18 @@ const TrainTimeTableForm: React.FC = () => {
             required
           />
         </div>
+        <div className="check">
+          <label htmlFor="seat available">Is seat available:</label>
+          <input
+            type="checkbox"
+            className="custom-checkbox"
+            id="seatavailable"
+            checked={seatAvailable}
+            onChange={handleseatAvailableChange}
+            required
+          />
+        </div>
+        
         <button type="submit" onClick={handleSubmit}>
           Add Train Schedule
         </button>
