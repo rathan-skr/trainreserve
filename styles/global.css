@@ -174,7 +174,7 @@ h3.main_h3 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.main_form_content input {
+.main_form_content input,select {
   padding: 8px;
   border: 1px solid #ccc;
   box-sizing: border-box;
@@ -448,7 +448,7 @@ input:disabled + .checkbox {
 /* Loading Animation */
 :root {
   --dot-jump: 20%;
-  --dot-size: 30px;
+  --dot-size:20px;
   --dot-color: #ff6701db;
 }
 

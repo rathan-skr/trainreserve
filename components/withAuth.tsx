@@ -12,7 +12,7 @@ const withAuth = (WrappedComponent: any) => {
     useEffect(() => {
       if (!user) {
         console.log("useruseruseruser", user);
-       // router.replace("/Authentication/Login");
+   router.replace("/Authentication/Login");
       }
     }, [user, router]);
 

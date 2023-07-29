@@ -14,6 +14,7 @@ import {
   addDoc,
   getDocs,
 } from "firebase/firestore";
+import TravelCard from "@/components/TravelCard";
 interface TravelData {
   id: string;
 }
@@ -22,7 +23,13 @@ const db = getFirestore(app);
 const Home: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [travelDataArray, setTravelDataArray] = useState<TravelData[]>([]);
+  const [stations, setStations] = useState([]);
+  const [stationFromID, setStationFromID] = useState(0);
+  const [stationFromName, setStationFromName] = useState("");
+  const [stationToID, setStationToID] = useState(0);
+  const [stationToName, setStationToName] = useState("");
   console.log("travelDataArray", travelDataArray);
+  console.log("stations",stationFromID,stationToID);
 
   const loadTravelData = async () => {
     try {
@@ -36,10 +43,17 @@ const Home: React.FC = () => {
       console.error("Error loading travel data:", error);
     }
   };
+  const handleStationFromChange = (event: any) => {
+    setStationFromID(event.target.value);
+  };
+  const handleStationToChange = (event: any) => {
+    setStationToID(event.target.value);
+  };
   const loadStationData = async () => {
     const querySnapshot = await getDocs(collection(db, "Stations"));
     querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
+      //  console.log(doc.id, " => ", );
+      setStations(doc.data().stations);
     });
   };
   useEffect(() => {
@@ -67,10 +81,32 @@ const Home: React.FC = () => {
         </div>
         <div className="main_form_content">
           <div className="from">
-            <input placeholder="From" />
+            <select
+              id="nameSelect"
+              value={stationFromID}
+              onChange={handleStationFromChange}
+            >
+              <option value="">-- Select a Arrival Station --</option>
+              {stations.map((nameObj: any) => (
+                <option key={nameObj.id} value={nameObj.id}>
+                  {nameObj.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="to">
-            <input placeholder="To" />
+            <select
+              id="nameSelect2"
+              value={stationToID}
+              onChange={handleStationToChange}
+            >
+              <option value="">-- Select a Depature Station --</option>
+              {stations.map((nameObj: any) => (
+                <option key={nameObj.id} value={nameObj.id}>
+                  {nameObj.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="">
             <div className="depature_input">
@@ -100,8 +136,9 @@ const Home: React.FC = () => {
           <TrainBoxComponent />
         </div>
       </div>
+   
     </div>
   );
 };
 
-export default Home;
+export default withAuth(Home);

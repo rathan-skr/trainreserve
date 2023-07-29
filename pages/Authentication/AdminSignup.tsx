@@ -11,7 +11,7 @@ const AdminSignupPage = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-  await adminSignup(email, password, role);
+      await adminSignup(email, password, role);
       // Redirect or perform other actions after successful signup
     } catch (error) {
       // Handle signup error
@@ -44,14 +44,15 @@ const AdminSignupPage = () => {
             />
           </div>
           <div className="row">
-          <label>
-            Role:
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-              {/* Add more role options if needed */}
-            </select>
-          </label></div>
+            <label>
+              Role:
+              <select value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+                {/* Add more role options if needed */}
+              </select>
+            </label>
+          </div>
           <div className="button_content">
             <button type="submit" className="button">
               Signup
