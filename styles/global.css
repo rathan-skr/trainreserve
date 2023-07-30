@@ -572,7 +572,6 @@ input.custom-checkbox {
   cursor: pointer;
   outline: none;
   font: 1em sans-serif;
-  
 }
 
 /* Custom checkbox shape */
@@ -730,7 +729,6 @@ input.custom-checkbox {
   box-shadow: 0px 0px 100px -10px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
   width: 350px;
- 
 
   &:hover > .button-favorite {
     display: inline-flex;
@@ -901,5 +899,36 @@ input.custom-checkbox {
   width: 100%;
   justify-content: center;
   flex-wrap: wrap;
- 
+}
+
+.page_404 {
+  padding: 40px 0;
+  background: #fff;
+  font-family: "Arvo", serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:100%;
+  overflow: hidden;
+}
+.four_zero_four_bg h1 {
+  font-size: 180px;
+  margin: 0;
+}
+
+.four_zero_four_bg h3 {
+  font-size: 80px;
+}
+
+.link_404 {
+  color: #fff !important;
+  padding: 10px 20px;
+  background: #ff6701db;
+  margin: 20px 0;
+  display: inline-block;
+}
+
+.container_404{
+height:620px;
+background: #fff;
 }
