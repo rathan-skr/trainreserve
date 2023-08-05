@@ -1,0 +1,78 @@
+.slider{
+    height: 70px;
+    background-color: white;
+}
+
+.cover{
+   text-align: center;
+}
+
+.coverImage{
+    height: 850px;
+    width: 100%;
+}
+
+.coverText{
+    position: absolute;
+    color: orangered;
+    font-size: 48px;
+    top: 20%;
+    left: 5%;
+}
+
+.userDiv{
+    position: absolute;
+    height: 250px;
+    width: 500px;
+    border-radius: 40px;
+    background-color: antiquewhite;
+    top: 60%;
+    left: 20%;
+}
+
+.adminDiv{
+    position: absolute;
+    height: 250px;
+    width: 500px;
+    border-radius: 40px;
+    background-color: antiquewhite;
+    top: 60%;
+    right: 20%;
+}
+
+
+.icon{
+    font-size: 100px;
+    padding-left: 50px;
+}
+
+.btnSection{
+    display: flex;
+    flex-direction: column;
+    padding-left: 80px;
+}
+
+.landBtn{
+    height: 50px;
+    width: 200px;
+    margin: 10px;
+    font-size: 20px;
+    border-radius: 28px;
+    background-color: orangered;
+
+    &:hover{
+        scale: 1.2;
+        background-color: orange;
+    }
+}
+
+.footer{
+    background-color: black;
+    height: max-content;
+}
+
+.footerText{
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
