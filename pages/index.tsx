@@ -18,7 +18,13 @@ import TravelCard from "@/components/TravelCard";
 import { loadStationData, loadTravelData } from "@/const/const";
 interface TravelData {
   id: string;
+  date: string;
+  stationData: { [key: string]: { charge: string; time: string } };
+  stationDataLocationKeys: string[];
+  startPlace: string;
+  endPlace: string;
 }
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const Home: React.FC = () => {
@@ -62,6 +68,34 @@ const Home: React.FC = () => {
     loadTravelData(setTravelDataArray);
     loadStationData(setStations);
   }, []);
+  const desiredDate: string = "2023-08-06";
+  const startPlace: string = "Kokuvil";
+  const endPlace: string = "Meesalai";
+  
+  const filteredData = travelDataArray.filter((item) => {
+    const dateMatch = item.date === desiredDate;
+    const stationData = item.stationData; // Access stationData property once for safer access
+    const stationDataLocationKeys: string[]  = stationData ? Object.keys(stationData) : [];
+    const startPlaceIndex = stationDataLocationKeys.indexOf(startPlace);
+    const endPlaceIndex = stationDataLocationKeys.indexOf(endPlace);
+  
+    // Check if startPlace is before endPlace and no other places in between
+    const placesMatch =
+      startPlaceIndex !== -1 &&
+      endPlaceIndex !== -1 &&
+      startPlaceIndex < endPlaceIndex &&
+      stationDataLocationKeys.slice(startPlaceIndex + 1, endPlaceIndex).length === 0;
+  
+    // Check if the train arrives at endPlace after the given time at startPlace
+    const startTime = parseFloat(stationData?.[startPlace]?.time?.replace(':', '.')) || 0;
+    const endTime = parseFloat(stationData?.[endPlace]?.time?.replace(':', '.')) || 0;
+    const timeMatch = endTime > startTime;
+  
+    return dateMatch && placesMatch && timeMatch;
+  });
+  
+  console.log(filteredData);
+  
   return (
     <div className="main_container">
       <div className="main_image_container">

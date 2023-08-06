@@ -121,7 +121,8 @@ const TrainTimeTableForm: React.FC = () => {
         classes,
         stationData,
         seatSelectionData,
-        preselectedSeats
+        preselectedSeats,
+        date
       });
       // Clear the form after successful submission
       setTrainID("");

@@ -16,6 +16,7 @@ const StationForm:React.FC<StationFormProps>= ({ onReceiveStationData }:any) => 
   ]);
   const [stations, setStations] = useState<{ id: number; name: string }[]>([]);
   const [selectedStationId, setSelectedStationId] = useState<number | null>(null);
+console.log(stations);
 
   useEffect(() => {
     loadStationData(setStations);
