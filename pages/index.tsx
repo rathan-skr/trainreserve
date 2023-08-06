@@ -15,6 +15,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import TravelCard from "@/components/TravelCard";
+import { loadStationData, loadTravelData } from "@/const/const";
 interface TravelData {
   id: string;
 }
@@ -31,34 +32,35 @@ const Home: React.FC = () => {
   console.log("travelDataArray", travelDataArray);
   console.log("stations", stationFromID, stationToID);
 
-  const loadTravelData = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "trainSchedules"));
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setTravelDataArray(data);
-    } catch (error) {
-      console.error("Error loading travel data:", error);
-    }
-  };
+  // const loadTravelData = async () => {
+  //   try {
+  //     const querySnapshot = await getDocs(collection(db, "trainSchedules"));
+  //     const data = querySnapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }));
+  //     setTravelDataArray(data);
+  //   } catch (error) {
+  //     console.error("Error loading travel data:", error);
+  //   }
+  // };
   const handleStationFromChange = (event: any) => {
     setStationFromID(event.target.value);
   };
   const handleStationToChange = (event: any) => {
     setStationToID(event.target.value);
   };
-  const loadStationData = async () => {
-    const querySnapshot = await getDocs(collection(db, "Stations"));
-    querySnapshot.forEach((doc) => {
-      //  console.log(doc.id, " => ", );
-      setStations(doc.data().stations);
-    });
-  };
+  // const loadStationData = async () => {
+  //   const querySnapshot = await getDocs(collection(db, "Stations"));
+  //   querySnapshot.forEach((doc) => {
+  //     //  console.log(doc.id, " => ", );
+  //     setStations(doc.data().stations);
+  //   });
+  // };
+  
   useEffect(() => {
-    loadTravelData();
-    loadStationData();
+    loadTravelData(setTravelDataArray);
+    loadStationData(setStations);
   }, []);
   return (
     <div className="main_container">

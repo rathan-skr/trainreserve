@@ -4,7 +4,7 @@ import Router from "next/router";
 
 const NotFoundPage: React.FC = () => {
   if (typeof window !== "undefined") {
-    // Router.replace('/Authentication/Login'); // Redirect to login page for any unauthorized access
+ //Router.replace('/Authentication/Login'); // Redirect to login page for any unauthorized access
   }
 
   return (

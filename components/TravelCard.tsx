@@ -31,7 +31,8 @@ const FavoriteBorderIcon = () => (
   </svg>
 );
 const TravelCard = ({ data }: any) => {
-  const [isFavorite, setIsFavorite] = React.useState(true);
+  const [isFavorite, setIsFavorite] = React.useState(true);console.log("xdata",data);
+  
   return (
     <div className="max-w-6xl mx-auto">
       <div className="showcase">

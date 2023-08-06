@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { useAuth } from "@/utils/authProvider";
@@ -7,8 +7,17 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { collection, doc, setDoc, updateDoc, addDoc } from "firebase/firestore";
 import withAuth from "./withAuth";
+import { loadStationData } from "@/const/const";
+import StationForm from "./StationForm";
+import SeatSelectionForm from "./SeatCreate";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+interface SeatSelection {
+  seatName: string;
+  rows: number;
+  seatsPerRow: number;
+  spacingColumn: number;
+}
 const TrainTimeTableForm: React.FC = () => {
   const { addTrainScheduleToFirestore } = useAuth();
   const [trainID, setTrainID] = useState("");
@@ -16,14 +25,18 @@ const TrainTimeTableForm: React.FC = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [stoppingLocations, setStoppingLocations] = useState<string[]>([]);
+  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [classes, setClasses] = useState<string[]>([]);
+  const [preselectedSeats, setPreselectedSeats] = useState<string[]>(['A-1']);
   const [date, setDate] = useState("");
   const [departureTime, setDepartureTime] = useState("");
   const [arrivalTime, setArrivalTime] = useState("");
   const [delay, setDelay] = useState("");
   const [currentLocation, setCurrentLocation] = useState("");
-  const[seatAvailable,setSeatAvailable]=useState<boolean>(false);
-
+  const [seatAvailable, setSeatAvailable] = useState<boolean>(false);
+  const [stationData, setStationData] = useState<{
+    [key: string]: { time: string; charge: string };
+  }>({});
   const handleTrainIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTrainID(event.target.value);
   };
@@ -33,14 +46,10 @@ const TrainTimeTableForm: React.FC = () => {
   ) => {
     setTrainName(event.target.value);
   };
-  const handleTrainFrom = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleTrainFrom = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFrom(event.target.value);
   };
-  const handleTrainTo = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleTrainTo = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTo(event.target.value);
   };
   const handleStoppingLocationsChange = (
@@ -52,9 +61,7 @@ const TrainTimeTableForm: React.FC = () => {
     );
     setStoppingLocations(selectedOptions);
   };
-  const handleClassChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleClassChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOptions = Array.from(
       event.target.selectedOptions,
       (option) => option.value
@@ -111,7 +118,10 @@ const TrainTimeTableForm: React.FC = () => {
         from,
         to,
         seatAvailable,
-        classes
+        classes,
+        stationData,
+        seatSelectionData,
+        preselectedSeats
       });
       // Clear the form after successful submission
       setTrainID("");
@@ -126,6 +136,24 @@ const TrainTimeTableForm: React.FC = () => {
     } catch (error) {
       console.error("Error adding train schedule:", error);
     }
+  };
+  const [stations, setStations] = useState([]);
+  useEffect(() => {
+    loadStationData(setStations);
+  }, []);
+  const handleReceiveStationData = (stationData: {
+    [key: string]: { time: string; charge: string };
+  }) => {
+    console.log("Received station data in parent component:", stationData);
+    setStationData(stationData);
+  };
+  const [seatSelectionData, setSeatSelectionData] = useState<SeatSelection[]>([]);
+  const handleReceiveSeatData = (seatSelectionData: SeatSelection[]) => {
+    console.log(
+      "Received seat selection data in parent component:",
+      seatSelectionData
+    );
+    setSeatSelectionData(seatSelectionData);
   };
 
   return (
@@ -197,6 +225,12 @@ const TrainTimeTableForm: React.FC = () => {
             {/* Add more options as needed */}
           </select>
         </div>
+        <div className="">
+          <StationForm onReceiveStationData={handleReceiveStationData} />
+          <SeatSelectionForm
+            onReceiveSeatSelectionData={handleReceiveSeatData}
+          />
+        </div>
         <div className="row">
           <label htmlFor="classes">Classes:</label>
           <select
@@ -263,7 +297,7 @@ const TrainTimeTableForm: React.FC = () => {
             required
           />
         </div>
-        
+
         <button type="submit" onClick={handleSubmit}>
           Add Train Schedule
         </button>

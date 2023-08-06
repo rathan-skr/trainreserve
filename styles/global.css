@@ -621,7 +621,7 @@ input.custom-checkbox {
   height: "50px";
   display: flex;
   flex-direction: column;
-  text-align: center;
+  /* text-align: center; */
 }
 .schedule_form:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
