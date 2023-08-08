@@ -35,67 +35,86 @@ const Home: React.FC = () => {
   const [stationFromName, setStationFromName] = useState("");
   const [stationToID, setStationToID] = useState(0);
   const [stationToName, setStationToName] = useState("");
+  const [availableTrains, setAvailableTrains] = useState<TravelData[]>([]);
+  const [availableReturnTrains, setAvailableReturnTrains] = useState<TravelData[]>([]);
   console.log("travelDataArray", travelDataArray);
   console.log("stations", stationFromID, stationToID);
-
-  // const loadTravelData = async () => {
-  //   try {
-  //     const querySnapshot = await getDocs(collection(db, "trainSchedules"));
-  //     const data = querySnapshot.docs.map((doc) => ({
-  //       id: doc.id,
-  //       ...doc.data(),
-  //     }));
-  //     setTravelDataArray(data);
-  //   } catch (error) {
-  //     console.error("Error loading travel data:", error);
-  //   }
-  // };
-  const handleStationFromChange = (event: any) => {
-    setStationFromID(event.target.value);
-  };
-  const handleStationToChange = (event: any) => {
-    setStationToID(event.target.value);
-  };
-  // const loadStationData = async () => {
-  //   const querySnapshot = await getDocs(collection(db, "Stations"));
-  //   querySnapshot.forEach((doc) => {
-  //     //  console.log(doc.id, " => ", );
-  //     setStations(doc.data().stations);
-  //   });
-  // };
-  
   useEffect(() => {
     loadTravelData(setTravelDataArray);
     loadStationData(setStations);
+    checkArrivalAvailability();
   }, []);
-  const desiredDate: string = "2023-08-06";
-  const startPlace: string = "Kokuvil";
-  const endPlace: string = "Meesalai";
-  
-  const filteredData = travelDataArray.filter((item) => {
-    const dateMatch = item.date === desiredDate;
-    const stationData = item.stationData; // Access stationData property once for safer access
-    const stationDataLocationKeys: string[]  = stationData ? Object.keys(stationData) : [];
-    const startPlaceIndex = stationDataLocationKeys.indexOf(startPlace);
-    const endPlaceIndex = stationDataLocationKeys.indexOf(endPlace);
-  
-    // Check if startPlace is before endPlace and no other places in between
-    const placesMatch =
-      startPlaceIndex !== -1 &&
-      endPlaceIndex !== -1 &&
-      startPlaceIndex < endPlaceIndex &&
-      stationDataLocationKeys.slice(startPlaceIndex + 1, endPlaceIndex).length === 0;
-  
-    // Check if the train arrives at endPlace after the given time at startPlace
-    const startTime = parseFloat(stationData?.[startPlace]?.time?.replace(':', '.')) || 0;
-    const endTime = parseFloat(stationData?.[endPlace]?.time?.replace(':', '.')) || 0;
-    const timeMatch = endTime > startTime;
-  
-    return dateMatch && placesMatch && timeMatch;
-  });
-  
-  console.log(filteredData);
-  
+  const [desiredDate, setDesiredDate] = useState("");//2023-08-06
+  const [returnDate, setReturnDate] = useState("");//2023-08-06
+  const [startPlace, setStartPlace] = useState("Kokuvil");
+  const [endPlace, setEndPlace] = useState("Meesalai");
+  const handleStationFromChange = (event: any) => {
+    setStationFromID(event.target.value);
+    setStartPlace(event.target.value);
+  };
+  const handleStationToChange = (event: any) => {
+    setStationToID(event.target.value);
+    setEndPlace(event.target.value);
+  };
+    const handleDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setDesiredDate(event.target.value);
+  };
+  const handleReturnDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReturnDate(event.target.value);
+};
+  const checkArrivalAvailability = () => {
+    const filteredData = travelDataArray.filter((item) => {
+      const dateMatch = item.date === desiredDate;
+      const stationData = item.stationData; // Access stationData property once for safer access
+      const stationDataLocationKeys: string[] = stationData
+        ? Object.keys(stationData)
+        : [];
+      console.log(stationDataLocationKeys);
+
+      const startPlaceIndex = stationDataLocationKeys.indexOf(startPlace);
+      const endPlaceIndex = stationDataLocationKeys.indexOf(endPlace);
+
+      // // Check if startPlace is before endPlace and no other places in between
+      // const placesMatch =
+      //   startPlaceIndex !== -1 &&
+      //   endPlaceIndex !== -1 &&
+      //   startPlaceIndex < endPlaceIndex &&
+      //   !stationDataLocationKeys
+      //     .slice(startPlaceIndex + 1, endPlaceIndex)
+      //     .some((location) => stationData[location] !== undefined);
+
+      // Check if the train arrives at endPlace after the given time at startPlace
+      const startTime =
+        parseFloat(stationData?.[startPlace]?.time?.replace(":", ".")) || 0;
+      const endTime =
+        parseFloat(stationData?.[endPlace]?.time?.replace(":", ".")) || 0;
+      const timeMatch = endTime > startTime;
+
+      return dateMatch  && timeMatch;
+    });
+    setAvailableTrains(filteredData);
+    console.log(filteredData,startPlace,endPlace,desiredDate);
+  };
+  const checkReturnAvailability = () => {
+    const filteredData = travelDataArray.filter((item) => {
+      const dateMatch = item.date === returnDate;
+      const stationData = item.stationData; // Access stationData property once for safer access
+      const stationDataLocationKeys: string[] = stationData
+        ? Object.keys(stationData)
+        : [];
+      console.log(stationDataLocationKeys);
+      const startTime =
+        parseFloat(stationData?.[startPlace]?.time?.replace(":", ".")) || 0;
+      const endTime =
+        parseFloat(stationData?.[ endPlace]?.time?.replace(":", ".")) || 0;
+      const timeMatch = endTime < startTime;
+
+      return dateMatch  && timeMatch;
+    });
+    setAvailableReturnTrains(filteredData);
+    console.log(filteredData,startPlace,endPlace,desiredDate);
+  };
+const check=()=>{isChecked&&checkReturnAvailability(),checkArrivalAvailability()};
   return (
     <div className="main_container">
       <div className="main_image_container">
@@ -124,7 +143,7 @@ const Home: React.FC = () => {
             >
               <option value="">-- Select a Arrival Station --</option>
               {stations.map((nameObj: any) => (
-                <option key={nameObj.id} value={nameObj.id}>
+                <option key={nameObj.id} value={nameObj.value}>
                   {nameObj.name}
                 </option>
               ))}
@@ -138,7 +157,7 @@ const Home: React.FC = () => {
             >
               <option value="">-- Select a Depature Station --</option>
               {stations.map((nameObj: any) => (
-                <option key={nameObj.id} value={nameObj.id}>
+                <option key={nameObj.id} value={nameObj.value}>
                   {nameObj.name}
                 </option>
               ))}
@@ -146,7 +165,7 @@ const Home: React.FC = () => {
           </div>
           <div className="">
             <div className="depature_input">
-              <input type="date" placeholder="Depature" />
+              <input type="date" placeholder="Depature"  onChange={handleDate}/>
             </div>
             <div className="check">
               <label>Return?</label>
@@ -160,21 +179,21 @@ const Home: React.FC = () => {
           </div>
           {isChecked && (
             <div className="depature_input">
-              <input type="date" placeholder="Return" />
+              <input type="date" placeholder="Return" onChange={handleReturnDate}/>
             </div>
           )}
           <div className="seats">
             <input placeholder="Seats" />
           </div>
-          <button>Check Availabilty</button>
+          <button onClick={check}>Check Availabilty</button>
         </div>
         <div className="train_box">
           <TrainBoxComponent />
         </div>
         <div className="train_cards">
-          {travelDataArray.map((item, index) => (
-        <TravelCard key={index} data={item} />
-      ))}
+          {availableTrains.map((item, index) => (
+            <TravelCard key={index} data={item} />
+          ))}
         </div>
       </div>
     </div>
