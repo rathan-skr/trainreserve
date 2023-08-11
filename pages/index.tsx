@@ -36,7 +36,9 @@ const Home: React.FC = () => {
   const [stationToID, setStationToID] = useState(0);
   const [stationToName, setStationToName] = useState("");
   const [availableTrains, setAvailableTrains] = useState<TravelData[]>([]);
-  const [availableReturnTrains, setAvailableReturnTrains] = useState<TravelData[]>([]);
+  const [availableReturnTrains, setAvailableReturnTrains] = useState<
+    TravelData[]
+  >([]);
   console.log("travelDataArray", travelDataArray);
   console.log("stations", stationFromID, stationToID);
   useEffect(() => {
@@ -44,10 +46,11 @@ const Home: React.FC = () => {
     loadStationData(setStations);
     checkArrivalAvailability();
   }, []);
-  const [desiredDate, setDesiredDate] = useState("");//2023-08-06
-  const [returnDate, setReturnDate] = useState("");//2023-08-06
+  const [desiredDate, setDesiredDate] = useState(""); //2023-08-06
+  const [returnDate, setReturnDate] = useState(""); //2023-08-06
   const [startPlace, setStartPlace] = useState("Kokuvil");
   const [endPlace, setEndPlace] = useState("Meesalai");
+  const [data, setData] = useState<TravelData[]>([]);
   const handleStationFromChange = (event: any) => {
     setStationFromID(event.target.value);
     setStartPlace(event.target.value);
@@ -56,12 +59,12 @@ const Home: React.FC = () => {
     setStationToID(event.target.value);
     setEndPlace(event.target.value);
   };
-    const handleDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setDesiredDate(event.target.value);
+  const handleDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDesiredDate(event.target.value);
   };
   const handleReturnDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReturnDate(event.target.value);
-};
+  };
   const checkArrivalAvailability = () => {
     const filteredData = travelDataArray.filter((item) => {
       const dateMatch = item.date === desiredDate;
@@ -70,10 +73,8 @@ const Home: React.FC = () => {
         ? Object.keys(stationData)
         : [];
       console.log(stationDataLocationKeys);
-
-      const startPlaceIndex = stationDataLocationKeys.indexOf(startPlace);
-      const endPlaceIndex = stationDataLocationKeys.indexOf(endPlace);
-
+      // const startPlaceIndex = stationDataLocationKeys.indexOf(startPlace);
+      // const endPlaceIndex = stationDataLocationKeys.indexOf(endPlace);
       // // Check if startPlace is before endPlace and no other places in between
       // const placesMatch =
       //   startPlaceIndex !== -1 &&
@@ -90,10 +91,10 @@ const Home: React.FC = () => {
         parseFloat(stationData?.[endPlace]?.time?.replace(":", ".")) || 0;
       const timeMatch = endTime > startTime;
 
-      return dateMatch  && timeMatch;
+      return dateMatch && timeMatch;
     });
     setAvailableTrains(filteredData);
-    console.log(filteredData,startPlace,endPlace,desiredDate);
+    console.log(filteredData, startPlace, endPlace, desiredDate);
   };
   const checkReturnAvailability = () => {
     const filteredData = travelDataArray.filter((item) => {
@@ -106,15 +107,21 @@ const Home: React.FC = () => {
       const startTime =
         parseFloat(stationData?.[startPlace]?.time?.replace(":", ".")) || 0;
       const endTime =
-        parseFloat(stationData?.[ endPlace]?.time?.replace(":", ".")) || 0;
+        parseFloat(stationData?.[endPlace]?.time?.replace(":", ".")) || 0;
       const timeMatch = endTime < startTime;
 
-      return dateMatch  && timeMatch;
+      return dateMatch && timeMatch;
     });
     setAvailableReturnTrains(filteredData);
-    console.log(filteredData,startPlace,endPlace,desiredDate);
+    console.log(filteredData, startPlace, endPlace, desiredDate);
   };
-const check=()=>{isChecked&&checkReturnAvailability(),checkArrivalAvailability()};
+  const check = () => {
+    isChecked && checkReturnAvailability(), checkArrivalAvailability();
+  };
+  const handleCardClick = (clickedItem:any) => {
+    setData(clickedItem); 
+    console.log(clickedItem); 
+  };
   return (
     <div className="main_container">
       <div className="main_image_container">
@@ -165,7 +172,7 @@ const check=()=>{isChecked&&checkReturnAvailability(),checkArrivalAvailability()
           </div>
           <div className="">
             <div className="depature_input">
-              <input type="date" placeholder="Depature"  onChange={handleDate}/>
+              <input type="date" placeholder="Depature" onChange={handleDate} />
             </div>
             <div className="check">
               <label>Return?</label>
@@ -179,7 +186,11 @@ const check=()=>{isChecked&&checkReturnAvailability(),checkArrivalAvailability()
           </div>
           {isChecked && (
             <div className="depature_input">
-              <input type="date" placeholder="Return" onChange={handleReturnDate}/>
+              <input
+                type="date"
+                placeholder="Return"
+                onChange={handleReturnDate}
+              />
             </div>
           )}
           <div className="seats">
@@ -187,15 +198,35 @@ const check=()=>{isChecked&&checkReturnAvailability(),checkArrivalAvailability()
           </div>
           <button onClick={check}>Check Availabilty</button>
         </div>
+
+        {availableTrains && (
+          <>
+            <>Arrival</>
+            <div className="train_cards">
+              {availableTrains.map((item, index) => (
+                <TravelCard key={index} data={item}  onClick={() => handleCardClick(item)}  />
+                
+              ))}
+            </div>
+          </>
+        )}
+        {isChecked && (
+          <>
+            <>Return</>
+            <div className="train_cards">
+              {availableReturnTrains.map((item, index) => (
+                <TravelCard key={index} data={item}  onClick={() => handleCardClick(item)}  />
+              ))}
+            </div>
+          </>
+        )}
         <div className="train_box">
-          <TrainBoxComponent />
+          <TrainBoxComponent data={data}/>
         </div>
-        <div className="train_cards">
-          {availableTrains.map((item, index) => (
-            <TravelCard key={index} data={item} />
-          ))}
+          <div className="train_box">
+           {isChecked && (   <TrainBoxComponent data={data} />)}
         </div>
-      </div>
+      </div>{" "}
     </div>
   );
 };

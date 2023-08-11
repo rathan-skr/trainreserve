@@ -1,25 +1,38 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
-import { useSwipeable } from 'react-swipeable';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
+import { useSwipeable } from "react-swipeable";
 
 interface SeatSelectionBoxProps {
   data: {
-    name: string;
+    seatName: string;
     rows: number;
     seatsPerRow: number;
     spacingColumn: number;
   };
   preselectedSeats: string[];
-  onSelectionChange: (name: string, selectedSeats: string[]) => void;
+  onSelectionChange: (seatName: string, selectedSeats: string[]) => void;
 }
-
+interface TravelData {
+  id: string;
+  date: string;
+  stationData: { [key: string]: { charge: string; time: string } };
+  stationDataLocationKeys: string[];
+  startPlace: string;
+  endPlace: string;
+}
+interface TrainBoxProps {
+  data: TravelData[];
+}
 const SeatSelectionBox: React.FC<SeatSelectionBoxProps> = ({
   data,
   preselectedSeats,
   onSelectionChange,
 }) => {
-  const { name, rows, seatsPerRow, spacingColumn } = data;
+  const { seatName, rows, seatsPerRow, spacingColumn } = data;
 
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
 
@@ -46,7 +59,7 @@ const SeatSelectionBox: React.FC<SeatSelectionBoxProps> = ({
       const seats: JSX.Element[] = [];
 
       for (let seat = 1; seat <= seatsPerRow; seat++) {
-        const seatLabel = `${name}-${(row - 1) * seatsPerRow + seat}`;
+        const seatLabel = `${seatName}-${(row - 1) * seatsPerRow + seat}`;
 
         const isPreselected = preselectedSeats.includes(seatLabel);
         const isChecked = selectedSeats.includes(seatLabel);
@@ -81,49 +94,54 @@ const SeatSelectionBox: React.FC<SeatSelectionBoxProps> = ({
 
   // Call the parent component's onSelectionChange callback when selected seats change
   useEffect(() => {
-    onSelectionChange(name, selectedSeats);
-  }, [name, selectedSeats, onSelectionChange]);
+    onSelectionChange(seatName, selectedSeats);
+  }, [seatName, selectedSeats, onSelectionChange]);
 
   return (
     <div className="seat-selection-container">
-      <h3 className="main_form_h3">Select Seats - {name}</h3>
+      <h3 className="main_form_h3">Select Seats - {seatName}</h3>
       <div className="seat-selection-wrapper">{renderSeatSelection()}</div>
     </div>
   );
 };
 
-const ParentComponent: React.FC = () => {
-  const [selectedSeatsData, setSelectedSeatsData] = useState<{ [name: string]: string[] }>({});
+const ParentComponent: React.FC<TrainBoxProps> = ({ data }: any) => {
+  const [selectedSeatsData, setSelectedSeatsData] = useState<{
+    [seatName: string]: string[];
+  }>({});
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const seatSelectionData = [
-    { name: 'A', rows: 5, seatsPerRow: 6, spacingColumn: 3 },
-    { name: 'B', rows: 8, seatsPerRow: 4, spacingColumn: 2 },
-    { name: 'C', rows: 10, seatsPerRow: 5, spacingColumn: 2 },
+  const seatSelectionData2 = [
+    { seatName: "A", rows: 5, seatsPerRow: 6, spacingColumn: 3 },
+    { seatName: "B", rows: 8, seatsPerRow: 4, spacingColumn: 2 },
+    { seatName: "C", rows: 10, seatsPerRow: 5, spacingColumn: 2 },
   ];
-  const preselectedSeats = ['A-1', 'B-12', 'C-23'];
-
-  // const handleSelectionChange = (name: string, selectedSeats: string[]) => {
+  const seatSelectionData = data.seatSelectionData||seatSelectionData2;
+const preselectedSeats2 = ["A-1", "B-12", "C-23"];
+ const preselectedSeats =data.preselectedSeats||preselectedSeats2;
+  // const handleSelectionChange = (seatName: string, selectedSeats: string[]) => {
   //   setSelectedSeatsData((prevSelectedSeatsData) => ({
   //     ...prevSelectedSeatsData,
-  //     [name]: selectedSeats,
+  //     [seatName]: selectedSeats,
   //   }));
   // };
-  const handleSelectionChange = (name: string, selectedSeats: string[]) => {
+  const handleSelectionChange = (seatName: string, selectedSeats: string[]) => {
     setSelectedSeatsData((prevSelectedSeatsData) => {
       // Check if the new selection is different from the previous one
-      if (JSON.stringify(prevSelectedSeatsData[name]) === JSON.stringify(selectedSeats)) {
+      if (
+        JSON.stringify(prevSelectedSeatsData[seatName]) ===
+        JSON.stringify(selectedSeats)
+      ) {
         // If it's the same, return the previous state to avoid unnecessary updates
         return prevSelectedSeatsData;
       }
-  
+
       // If it's different, update the selected seats data
       return {
         ...prevSelectedSeatsData,
-        [name]: selectedSeats,
+        [seatName]: selectedSeats,
       };
     });
   };
-  
 
   const handleSwipe = (delta: number) => {
     const newIndex = currentIndex + delta;
@@ -144,36 +162,45 @@ const ParentComponent: React.FC = () => {
   useEffect(() => {
     const formattedSelectedSeats: string[] = [];
 
-    for (const name in selectedSeatsData) {
-      const seats = selectedSeatsData[name];
-      formattedSelectedSeats.push(...seats.map((seat) => `${name}-${seat.split('-')[1]}`));
+    for (const seatName in selectedSeatsData) {
+      const seats = selectedSeatsData[seatName];
+      formattedSelectedSeats.push(
+        ...seats.map((seat) => `${seatName}-${seat.split("-")[1]}`)
+      );
     }
 
     console.log(formattedSelectedSeats);
   }, [selectedSeatsData]);
+console.log("data",data);
 
   return (
     <div className="swipe-box" {...handlers}>
       <div
-        className={`swipe-button ${isFirstBox ? 'disabled' : ''}`}
+        className={`swipe-button ${isFirstBox ? "disabled" : ""}`}
         onClick={() => handleSwipe(-1)}
       >
-        <FontAwesomeIcon icon={faChevronLeft} className={isFirstBox ? 'disabled' : ''} />
+        <FontAwesomeIcon
+          icon={faChevronLeft}
+          className={isFirstBox ? "disabled" : ""}
+        />
       </div>
       <div className="seat-selection-box">
         <SeatSelectionBox
           data={seatSelectionData[currentIndex]}
-          preselectedSeats={preselectedSeats.filter((seat) =>
-            seat.startsWith(seatSelectionData[currentIndex].name + '-')
+          preselectedSeats={preselectedSeats.filter((seat:any) =>
+            seat.startsWith(seatSelectionData[currentIndex].seatName + "-")
           )}
           onSelectionChange={handleSelectionChange}
         />
       </div>
       <div
-        className={`swipe-button ${isLastBox ? 'disabled' : ''}`}
+        className={`swipe-button ${isLastBox ? "disabled" : ""}`}
         onClick={() => handleSwipe(1)}
       >
-        <FontAwesomeIcon icon={faChevronRight} className={isLastBox ? 'disabled' : ''} />
+        <FontAwesomeIcon
+          icon={faChevronRight}
+          className={isLastBox ? "disabled" : ""}
+        />
       </div>
     </div>
   );

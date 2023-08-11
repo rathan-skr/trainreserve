@@ -30,11 +30,11 @@ const FavoriteBorderIcon = () => (
     <path d="M17.73 2.27a6 6 0 0 1 0 8.49L12 21.35l-5.73-5.59a6 6 0 0 1 0-8.49 6 6 0 0 1 8.54 0" />
   </svg>
 );
-const TravelCard = ({ data }: any) => {
+const TravelCard = ({ data, onClick  }: any) => {
   const [isFavorite, setIsFavorite] = React.useState(true);console.log("xdata",data);
   
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto" onClick={onClick}>
       <div className="showcase">
         <div className="travel-card">
           <div className="image">
