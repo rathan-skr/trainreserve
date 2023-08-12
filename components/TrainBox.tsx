@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
-
+//-----------------------------------------------------------------interfaces-------------------------------------------------------------------------------------//
 interface SeatSelectionBoxProps {
   data: {
     seatName: string;
@@ -26,22 +26,22 @@ interface TravelData {
 }
 interface TrainBoxProps {
   data: TravelData[];
+  onButtonClicked: ({ data }: any) => void;
+  formattedSelectedSeats: string[];
 }
+//---------------------------------------------------------------Seat selection box------------------------------------------------------------------------------//
 const SeatSelectionBox: React.FC<SeatSelectionBoxProps> = ({
   data,
   preselectedSeats,
   onSelectionChange,
 }) => {
-  const { seatName, rows, seatsPerRow, spacingColumn } = data;
-
+  const { seatName, rows, seatsPerRow, spacingColumn } = data || {};
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-
   const handleSeatSelection = (seat: string) => {
     // Check if the seat is preselected or not before handling the selection
     if (preselectedSeats.includes(seat)) {
       return;
     }
-
     // Toggle seat selection
     setSelectedSeats((prevSelectedSeats) => {
       if (prevSelectedSeats.includes(seat)) {
@@ -51,19 +51,16 @@ const SeatSelectionBox: React.FC<SeatSelectionBoxProps> = ({
       }
     });
   };
-
+  //----------------------------------------------------------renderSeatSelection--------------------------------------------------------------------------------//
   const renderSeatSelection = () => {
     const seatSelection: JSX.Element[] = [];
-
     for (let row = 1; row <= rows; row++) {
       const seats: JSX.Element[] = [];
-
       for (let seat = 1; seat <= seatsPerRow; seat++) {
         const seatLabel = `${seatName}-${(row - 1) * seatsPerRow + seat}`;
 
         const isPreselected = preselectedSeats.includes(seatLabel);
         const isChecked = selectedSeats.includes(seatLabel);
-
         seats.push(
           <label key={`seat-${row}-${seat}`} className="seat-label">
             <input
@@ -81,17 +78,15 @@ const SeatSelectionBox: React.FC<SeatSelectionBoxProps> = ({
           seats.push(<div key={`gap-${row}-${seat}`} className="column-gap" />);
         }
       }
-
       seatSelection.push(
         <div key={`row-${row}`} className="row-wrapper">
           <div className="seat-wrapper">{seats}</div>
         </div>
       );
     }
-
     return seatSelection;
   };
-
+  const check = () => {};
   // Call the parent component's onSelectionChange callback when selected seats change
   useEffect(() => {
     onSelectionChange(seatName, selectedSeats);
@@ -101,11 +96,16 @@ const SeatSelectionBox: React.FC<SeatSelectionBoxProps> = ({
     <div className="seat-selection-container">
       <h3 className="main_form_h3">Select Seats - {seatName}</h3>
       <div className="seat-selection-wrapper">{renderSeatSelection()}</div>
+      <div className="main_form_content"></div>
     </div>
   );
 };
-
-const ParentComponent: React.FC<TrainBoxProps> = ({ data }: any) => {
+//---------------------------------------------------------Parent Component---------------------------------------------------------------------------//
+const ParentComponent: React.FC<TrainBoxProps> = ({
+  data,
+  onButtonClicked,
+  formattedSelectedSeats,
+}: any) => {
   const [selectedSeatsData, setSelectedSeatsData] = useState<{
     [seatName: string]: string[];
   }>({});
@@ -115,15 +115,9 @@ const ParentComponent: React.FC<TrainBoxProps> = ({ data }: any) => {
     { seatName: "B", rows: 8, seatsPerRow: 4, spacingColumn: 2 },
     { seatName: "C", rows: 10, seatsPerRow: 5, spacingColumn: 2 },
   ];
-  const seatSelectionData = data.seatSelectionData||seatSelectionData2;
-const preselectedSeats2 = ["A-1", "B-12", "C-23"];
- const preselectedSeats =data.preselectedSeats||preselectedSeats2;
-  // const handleSelectionChange = (seatName: string, selectedSeats: string[]) => {
-  //   setSelectedSeatsData((prevSelectedSeatsData) => ({
-  //     ...prevSelectedSeatsData,
-  //     [seatName]: selectedSeats,
-  //   }));
-  // };
+  const seatSelectionData = data.seatSelectionData || seatSelectionData2;
+  const preselectedSeats2 = ["A-1", "B-12", "C-23"];
+  const preselectedSeats = data.preselectedSeats || preselectedSeats2;
   const handleSelectionChange = (seatName: string, selectedSeats: string[]) => {
     setSelectedSeatsData((prevSelectedSeatsData) => {
       // Check if the new selection is different from the previous one
@@ -142,37 +136,38 @@ const preselectedSeats2 = ["A-1", "B-12", "C-23"];
       };
     });
   };
-
   const handleSwipe = (delta: number) => {
     const newIndex = currentIndex + delta;
-
     if (newIndex >= 0 && newIndex < seatSelectionData.length) {
       setCurrentIndex(newIndex);
     }
   };
-
   const isFirstBox = currentIndex === 0;
   const isLastBox = currentIndex === seatSelectionData.length - 1;
-
   const handlers = useSwipeable({
     onSwipedLeft: () => handleSwipe(1),
     onSwipedRight: () => handleSwipe(-1),
   });
-
+  //----------------------------------------------------------------------formattedSelectedSeats-------------------------------------------------------------------------------------------//
+  const formattedSelectedSeats1: string[] = [];
   useEffect(() => {
-    const formattedSelectedSeats: string[] = [];
-
-    for (const seatName in selectedSeatsData) {
-      const seats = selectedSeatsData[seatName];
-      formattedSelectedSeats.push(
-        ...seats.map((seat) => `${seatName}-${seat.split("-")[1]}`)
-      );
-    }
-
-    console.log(formattedSelectedSeats);
+   
+    formattedSelectedSeats.push(Object.values(selectedSeatsData).flat());
+    console.log(formattedSelectedSeats1);
   }, [selectedSeatsData]);
-console.log("data",data);
+  // useEffect(() => {
+  //   const formattedSelectedSeats1: string[] = [];
+  //   for (const seatName in selectedSeatsData) {
+  //     if (seatName === selectedSeatsData[seatName][0]?.split("-")[0]) {
+  //       formattedSelectedSeats.push(...selectedSeatsData[seatName]);
+  //     }
+  //   }
+  //   console.log(formattedSelectedSeats);
+  //   const combined = Object.values(selectedSeatsData).flat();
+  //   console.log(combined);
+  // }, [selectedSeatsData]);
 
+  console.log("data", selectedSeatsData);
   return (
     <div className="swipe-box" {...handlers}>
       <div
@@ -187,8 +182,8 @@ console.log("data",data);
       <div className="seat-selection-box">
         <SeatSelectionBox
           data={seatSelectionData[currentIndex]}
-          preselectedSeats={preselectedSeats.filter((seat:any) =>
-            seat.startsWith(seatSelectionData[currentIndex].seatName + "-")
+          preselectedSeats={preselectedSeats.filter((seat: any) =>
+            seat.startsWith(seatSelectionData[currentIndex]?.seatName + "-")
           )}
           onSelectionChange={handleSelectionChange}
         />
@@ -202,8 +197,10 @@ console.log("data",data);
           className={isLastBox ? "disabled" : ""}
         />
       </div>
+      <button onClick={() => onButtonClicked(selectedSeatsData)}>
+        Confirm
+      </button>
     </div>
   );
 };
-
 export default ParentComponent;

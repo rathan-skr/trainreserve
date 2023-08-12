@@ -908,7 +908,7 @@ input.custom-checkbox {
   display: flex;
   justify-content: center;
   align-items: center;
-  height:100%;
+  height: 100%;
   overflow: hidden;
 }
 .four_zero_four_bg h1 {
@@ -928,7 +928,12 @@ input.custom-checkbox {
   display: inline-block;
 }
 
-.container_404{
-height:620px;
-background: #fff;
+.container_404 {
+  height: 620px;
+  background: #fff;
+}
+.selected-card {
+  border: 2px solid #ff6701db; /* You can adjust the border style as needed */
+  border-radius: 15px;
+  width: 350px;
 }

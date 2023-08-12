@@ -50,7 +50,12 @@ const Home: React.FC = () => {
   const [returnDate, setReturnDate] = useState(""); //2023-08-06
   const [startPlace, setStartPlace] = useState("Kokuvil");
   const [endPlace, setEndPlace] = useState("Meesalai");
-  const [data, setData] = useState<TravelData[]>([]);
+  const [arrivalData, setArrivalData] = useState<TravelData[]>([]);
+  const [returnData, setReturnData] = useState<TravelData[]>([]);
+  const [selectedCardIndexArrival, setSelectedCardIndexArrival] = useState(-1);
+  const [selectedCardIndexReturn, setSelectedCardIndexReturn] = useState(-1);
+  const [activeReturnSection, setActiveReturnSection] = useState("");
+  const [activeArrivalSection, setActiveArrivalSection] = useState("");
   const handleStationFromChange = (event: any) => {
     setStationFromID(event.target.value);
     setStartPlace(event.target.value);
@@ -118,10 +123,84 @@ const Home: React.FC = () => {
   const check = () => {
     isChecked && checkReturnAvailability(), checkArrivalAvailability();
   };
-  const handleCardClick = (clickedItem:any) => {
-    setData(clickedItem); 
-    console.log(clickedItem); 
+  const handleCardClick = (clickedItem: any) => {
+    if (activeSection === "arrival") {
+      setArrivalData(clickedItem);
+      setActiveArrivalSection("arrival");
+      console.log(clickedItem);
+    } else if (activeSection === "return") {
+      setReturnData(clickedItem);
+      console.log(clickedItem);
+      setActiveReturnSection("return");
+    }
   };
+  let activeSection = "";
+  let activeBox = "";
+  const [selectedArrivalData, setSelectedArrivalData] = useState(null);
+  const [showArrivalTable, setShowArrivalTable] = useState(false);
+  const [showReturnTable, setShowReturnTable] = useState(false);
+  const [showArrivalData, setShowArrivalData] = useState(false);
+  const [showReturnData, setShowReturnData] = useState(false);
+  const handleButtonClicked2 = ({ data }: any) => {
+    console.log("calling", activeBox, data);
+    setSelectedArrivalData(data);
+    console.log(selectedArrivalData);
+  };
+
+  const [formattedSelectedSeats, setFormattedSelectedSeats] = useState<
+    string[]
+  >([]);
+  const handleButtonClicked = ({ data }: any) => {
+    console.log("calling", activeBox, data);
+    // Update the selected arrival data
+    setSelectedArrivalData(data);
+    // Calculate total value based on selected seats
+    const seatCounts: { [key: string]: number } = {
+      A: 0,
+      B: 0,
+      C: 0,
+    };
+    let lastNonEmptyArray: string[] = [];
+    let x = formattedSelectedSeats.length;
+    console.log(formattedSelectedSeats[x - 1]);
+    let seats = formattedSelectedSeats[x - 1];
+    console.log(seats);
+    const uniqueSeats = [];
+    const seen: { [key: string]: boolean } = {};
+
+    for (const item of seats) {
+      if (!seen[item]) {
+        uniqueSeats.push(item);
+        seen[item] = true;
+      }
+    }
+    console.log(uniqueSeats);
+    console.log(lastNonEmptyArray);
+    uniqueSeats.forEach((seat: any) => {
+      const [letter] = seat.split("-");
+      if (seatCounts.hasOwnProperty(letter)) {
+        seatCounts[letter]++;
+      }
+    });
+    const valueMultiplier: { [key: string]: number } = {
+      A: 500,
+      B: 300,
+      C: 200,
+    };
+    const totalValue = Object.keys(seatCounts).reduce((total, letter) => {
+      return total + seatCounts[letter] * valueMultiplier[letter];
+    }, 0);
+    console.log("Seat counts:", seatCounts, formattedSelectedSeats);
+    console.log("Total value:", totalValue);
+    if (totalValue >= 200) {
+      setShowReturnTable(true);
+      setShowArrivalTable(false);
+    }
+    if (showReturnTable&&totalValue >= 200) {
+      setShowReturnTable(false);
+    }
+  };
+
   return (
     <div className="main_container">
       <div className="main_image_container">
@@ -201,11 +280,24 @@ const Home: React.FC = () => {
 
         {availableTrains && (
           <>
-            <>Arrival</>
             <div className="train_cards">
               {availableTrains.map((item, index) => (
-                <TravelCard key={index} data={item}  onClick={() => handleCardClick(item)}  />
-                
+                <div
+                  className={
+                    selectedCardIndexArrival === index ? "selected-card" : ""
+                  }
+                >
+                  <TravelCard
+                    key={index}
+                    data={item}
+                    onClick={() => {
+                      handleCardClick(item);
+                      activeSection = "arrival";
+                      setSelectedCardIndexArrival(index);
+                      setShowArrivalTable(true);
+                    }}
+                  />
+                </div>
               ))}
             </div>
           </>
@@ -215,18 +307,48 @@ const Home: React.FC = () => {
             <>Return</>
             <div className="train_cards">
               {availableReturnTrains.map((item, index) => (
-                <TravelCard key={index} data={item}  onClick={() => handleCardClick(item)}  />
+                <div
+                  className={
+                    selectedCardIndexReturn === index ? "selected-card" : ""
+                  }
+                >
+                  <TravelCard
+                    key={index}
+                    data={item}
+                    onClick={() => {
+                      handleCardClick(item);
+                      activeSection = "return";
+                      setSelectedCardIndexReturn(index);
+                    }}
+                  />
+                </div>
               ))}
             </div>
           </>
         )}
         <div className="train_box">
-          <TrainBoxComponent data={data}/>
+          {showArrivalTable && (
+            <>
+              {" "}
+              <>Select Arrival Seats</>
+              <TrainBoxComponent
+                data={arrivalData}
+                formattedSelectedSeats={formattedSelectedSeats}
+                onButtonClicked={handleButtonClicked}
+              />
+            </>
+          )}
         </div>
-          <div className="train_box">
-           {isChecked && (   <TrainBoxComponent data={data} />)}
+        <div className="train_box">
+          {isChecked && showReturnTable && (
+            <TrainBoxComponent
+              data={returnData}
+              onButtonClicked={handleButtonClicked}
+              formattedSelectedSeats={formattedSelectedSeats}
+            />
+          )}
         </div>
-      </div>{" "}
+      </div>
     </div>
   );
 };
