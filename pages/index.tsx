@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 
 import firebaseConfig from "@/firebase/firebaseConfig";
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getDoc, getFirestore } from "firebase/firestore";
 import {
   collection,
   doc,
@@ -25,6 +25,7 @@ interface TravelData {
   startPlace: string;
   endPlace: string;
   trainName: string;
+  preselectedSeats: string[];
 }
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -236,10 +237,69 @@ const Home: React.FC = () => {
       setReturnCharge(totalValue);
     }
   };
-const Payment =()=>{
-console.log(arrivalCharge+returnCharge);
+  const Payment = () => {
+    console.log(arrivalCharge + returnCharge);
+    loadseatData();
+    updateSElectedSeats();
+  };
+  const loadseatData = async () => {
+    const trainSeatData = {
+      trainName: selectedCardDataArrival[0]?.trainName,
+      date: selectedCardDataArrival[0]?.date,
+      startPlace,
+      endPlace,
+      starttime: selectedCardDataArrival[0]?.stationData[startPlace]?.time,
+      endtime: selectedCardDataArrival[0]?.stationData[endPlace]?.time,
+      selectedCardSeatsaArrival,
+      arrivalCharge,
+    };
+    try {
+      const docRef = await addDoc(
+        collection(db, "SeatBookings"),
+        trainSeatData
+      );
+      console.log("Document written with ID:", docRef.id);
+    } catch (error) {
+      console.error("Error adding document:", error);
+    }
+  };
+  // const preselectedSeats = selectedCardDataArrival[0]?.preselectedSeats;
+  // const [mergedSeats, setMergedSeats] = useState<string[]>([""]);
 
-}
+  // setMergedSeats([...preselectedSeats, ...selectedCardSeatsaArrival]);
+
+  // console.log(mergedSeats);
+
+  // const updateSElectedSeats = async () => {
+  //   try {
+  //     const docRef = doc(db, "trainSchedules", selectedCardDataArrival[0]?.id);
+  //     await updateDoc(docRef, { preselectedSeats: mergedSeats });
+  //     console.log("Train name updated successfully");
+  //   } catch (error) {
+  //     console.error("Error updating train name:", error);
+  //   }
+  // };
+
+  const updateSElectedSeats = async () => {
+    try {
+      const docRef = doc(db, "trainSchedules", selectedCardDataArrival[0]?.id);
+      
+      // Get the current preselectedSeats from the Firestore document
+      const documentSnapshot = await getDoc(docRef);
+      const existingPreselectedSeats = documentSnapshot.data()?.preselectedSeats || [];
+  
+      // Merge the existing preselectedSeats with the new seats
+      const mergedSeats = [...existingPreselectedSeats, ...selectedCardSeatsaArrival];
+  
+      // Update the Firestore document with the merged seats
+      await updateDoc(docRef, { preselectedSeats: mergedSeats });
+      
+      console.log("Preselected seats updated successfully",mergedSeats,selectedCardDataArrival[0]?.id);
+    } catch (error) {
+      console.error("Error updating preselected seats:", error);
+    }
+  };
+  
   return (
     <div className="main_container">
       <div className="main_image_container">
@@ -503,9 +563,7 @@ console.log(arrivalCharge+returnCharge);
               </div>
             )}
             <div className="main_form_content">
-              <button onClick={() =>Payment ()}>
-                Proceed Payment
-              </button>
+              <button onClick={() => Payment()}>Proceed Payment</button>
             </div>
           </div>
         )}
