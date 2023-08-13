@@ -46,7 +46,7 @@ const TravelCard = ({ data, onClick  }: any) => {
               {data?.from} to {data?.to}
             </h1>
             <h1 className="category">
-              {data?.arrivalTime} to {data?.departureTime}
+           {data?.departureTime}    to {data?.arrivalTime}
             </h1>
             <div className="recommendation">
               {data?.seatAvailable ? (

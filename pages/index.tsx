@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import TravelCard from "@/components/TravelCard";
 import { loadStationData, loadTravelData } from "@/const/const";
+import { time } from "console";
 interface TravelData {
   id: string;
   date: string;
@@ -23,8 +24,8 @@ interface TravelData {
   stationDataLocationKeys: string[];
   startPlace: string;
   endPlace: string;
+  trainName: string;
 }
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const Home: React.FC = () => {
@@ -39,7 +40,7 @@ const Home: React.FC = () => {
   const [availableReturnTrains, setAvailableReturnTrains] = useState<
     TravelData[]
   >([]);
-  console.log("travelDataArray", travelDataArray);
+  console.log("travelDataArray", availableTrains);
   console.log("stations", stationFromID, stationToID);
   useEffect(() => {
     loadTravelData(setTravelDataArray);
@@ -48,12 +49,32 @@ const Home: React.FC = () => {
   }, []);
   const [desiredDate, setDesiredDate] = useState(""); //2023-08-06
   const [returnDate, setReturnDate] = useState(""); //2023-08-06
-  const [startPlace, setStartPlace] = useState("Kokuvil");
-  const [endPlace, setEndPlace] = useState("Meesalai");
+  const [startPlace, setStartPlace] = useState("");
+  const [endPlace, setEndPlace] = useState("");
+  const [startPlaceTime, setStartPlaceTime] = useState("");
+  const [endPlaceTime, setEndPlaceTime] = useState("");
   const [arrivalData, setArrivalData] = useState<TravelData[]>([]);
   const [returnData, setReturnData] = useState<TravelData[]>([]);
   const [selectedCardIndexArrival, setSelectedCardIndexArrival] = useState(-1);
   const [selectedCardIndexReturn, setSelectedCardIndexReturn] = useState(-1);
+  const [selectedCardDataArrival, setSelectedCardDataArrival] = useState<
+    TravelData[]
+  >([]);
+  const [selectedCardDataReturn, setSelectedCardDataReturn] = useState<
+    TravelData[]
+  >([]);
+  const [selectedCardSeatsaArrival, setSelectedCardSeatsaArrival] = useState<
+    string[]
+  >([]);
+  const [selectedCardSeatsaReturn, setSelectedCardSeatsaReturn] = useState<
+    string[]
+  >([]);
+  console.log(returnData, arrivalData);
+
+  console.log("A", selectedCardDataArrival, selectedCardSeatsaArrival);
+  console.log("R", selectedCardDataReturn, selectedCardSeatsaReturn);
+  console.log("A1", selectedCardSeatsaArrival);
+  console.log("R1", selectedCardSeatsaReturn);
   const [activeReturnSection, setActiveReturnSection] = useState("");
   const [activeArrivalSection, setActiveArrivalSection] = useState("");
   const handleStationFromChange = (event: any) => {
@@ -95,7 +116,9 @@ const Home: React.FC = () => {
       const endTime =
         parseFloat(stationData?.[endPlace]?.time?.replace(":", ".")) || 0;
       const timeMatch = endTime > startTime;
-
+      setStartPlaceTime(stationData?.[startPlace]?.time);
+      setEndPlaceTime(stationData?.[endPlace]?.time);
+      console.log(startPlaceTime, endTime);
       return dateMatch && timeMatch;
     });
     setAvailableTrains(filteredData);
@@ -124,6 +147,8 @@ const Home: React.FC = () => {
     isChecked && checkReturnAvailability(), checkArrivalAvailability();
   };
   const handleCardClick = (clickedItem: any) => {
+    console.log(arrivalData);
+
     if (activeSection === "arrival") {
       setArrivalData(clickedItem);
       setActiveArrivalSection("arrival");
@@ -139,14 +164,17 @@ const Home: React.FC = () => {
   const [selectedArrivalData, setSelectedArrivalData] = useState(null);
   const [showArrivalTable, setShowArrivalTable] = useState(false);
   const [showReturnTable, setShowReturnTable] = useState(false);
-  const [showArrivalData, setShowArrivalData] = useState(false);
-  const [showReturnData, setShowReturnData] = useState(false);
+  const [showReturnTable2, setShowReturnTable2] = useState(false);
+  const [showArrivalData, setShowArrivalData] = useState(true);
+  const [showReturnData, setShowReturnData] = useState(true);
+  const [showBill, setShowBill] = useState(false);
+  const [arrivalCharge, setArrivalCharge] = useState(0);
+  const [returnCharge, setReturnCharge] = useState(0);
   const handleButtonClicked2 = ({ data }: any) => {
     console.log("calling", activeBox, data);
     setSelectedArrivalData(data);
-    console.log(selectedArrivalData);
   };
-
+  console.log(selectedCardDataReturn);
   const [formattedSelectedSeats, setFormattedSelectedSeats] = useState<
     string[]
   >([]);
@@ -192,15 +220,26 @@ const Home: React.FC = () => {
     }, 0);
     console.log("Seat counts:", seatCounts, formattedSelectedSeats);
     console.log("Total value:", totalValue);
-    if (totalValue >= 200) {
+    if (showArrivalData && totalValue >= 200) {
       setShowReturnTable(true);
+      setShowArrivalData(false);
       setShowArrivalTable(false);
+      setSelectedCardSeatsaArrival(uniqueSeats);
+      !showReturnTable2 && setShowBill(true);
+      setArrivalCharge(totalValue);
     }
-    if (showReturnTable&&totalValue >= 200) {
+    if (showReturnTable && totalValue >= 200) {
       setShowReturnTable(false);
+      setSelectedCardSeatsaReturn(uniqueSeats);
+      setShowReturnData(false);
+      setShowBill(true);
+      setReturnCharge(totalValue);
     }
   };
+const Payment =()=>{
+console.log(arrivalCharge+returnCharge);
 
+}
   return (
     <div className="main_container">
       <div className="main_image_container">
@@ -277,9 +316,9 @@ const Home: React.FC = () => {
           </div>
           <button onClick={check}>Check Availabilty</button>
         </div>
-
-        {availableTrains && (
+        {availableTrains && showArrivalData && (
           <>
+            {availableTrains.length >= 1 && <>Arrival trains</>}
             <div className="train_cards">
               {availableTrains.map((item, index) => (
                 <div
@@ -294,7 +333,9 @@ const Home: React.FC = () => {
                       handleCardClick(item);
                       activeSection = "arrival";
                       setSelectedCardIndexArrival(index);
+                      3;
                       setShowArrivalTable(true);
+                      setSelectedCardDataArrival([item]);
                     }}
                   />
                 </div>
@@ -302,9 +343,9 @@ const Home: React.FC = () => {
             </div>
           </>
         )}
-        {isChecked && (
+        {isChecked && showReturnData && (
           <>
-            <>Return</>
+            {availableReturnTrains.length >= 1 && <>Return trains</>}
             <div className="train_cards">
               {availableReturnTrains.map((item, index) => (
                 <div
@@ -319,6 +360,8 @@ const Home: React.FC = () => {
                       handleCardClick(item);
                       activeSection = "return";
                       setSelectedCardIndexReturn(index);
+                      setSelectedCardDataReturn([item]);
+                      setShowReturnTable2(true);
                     }}
                   />
                 </div>
@@ -329,10 +372,9 @@ const Home: React.FC = () => {
         <div className="train_box">
           {showArrivalTable && (
             <>
-              {" "}
               <>Select Arrival Seats</>
               <TrainBoxComponent
-                data={arrivalData}
+                data={selectedCardDataArrival}
                 formattedSelectedSeats={formattedSelectedSeats}
                 onButtonClicked={handleButtonClicked}
               />
@@ -340,14 +382,134 @@ const Home: React.FC = () => {
           )}
         </div>
         <div className="train_box">
-          {isChecked && showReturnTable && (
-            <TrainBoxComponent
-              data={returnData}
-              onButtonClicked={handleButtonClicked}
-              formattedSelectedSeats={formattedSelectedSeats}
-            />
+          {isChecked && showReturnTable && showReturnTable2 && (
+            <>
+              <>Select Return Seats</>
+              <TrainBoxComponent
+                data={selectedCardDataReturn}
+                onButtonClicked={handleButtonClicked}
+                formattedSelectedSeats={formattedSelectedSeats}
+              />
+            </>
           )}
         </div>
+        {showBill && (
+          <div className="train_box2">
+            Billing
+            {selectedCardSeatsaArrival.length >= 1 && (
+              <div className="ticket">
+                <div className="header">
+                  <h5>Arrival Ticket</h5>
+                </div>
+                <hr></hr>
+                <div className="row2">
+                  <span className="label">Train name:</span>
+                  <span className="value">
+                    {selectedCardDataArrival[0]?.trainName}
+                  </span>
+                </div>
+                <div className="row2">
+                  <span className="label">Date:</span>
+                  <span className="value">
+                    {selectedCardDataArrival[0]?.date}
+                  </span>
+                </div>
+                <div className="row2">
+                  <span className="label">Start Place:</span>
+                  <span className="value">{startPlace}</span>
+                </div>
+                <div className="row2">
+                  <span className="label">Start Time:</span>
+                  <span className="value">
+                    {selectedCardDataArrival[0]?.stationData[startPlace]?.time}
+                  </span>
+                </div>
+                <div className="row2">
+                  <span className="label">End Place:</span>
+                  <span className="value">{endPlace}</span>
+                </div>
+                <div className="row2">
+                  <span className="label">End Time:</span>
+                  <span className="value">
+                    {selectedCardDataArrival[0]?.stationData[endPlace]?.time}
+                  </span>
+                </div>
+                <div className="row2">
+                  <span className="label">Seats:</span>
+                  <span className="value">
+                    {selectedCardSeatsaArrival.map((item, index) => (
+                      <div key={index}>{item}</div>
+                    ))}
+                  </span>
+                </div>
+                <hr></hr>
+                <div className="row2">
+                  <span className="label">Charge:</span>
+                  <span className="value">{arrivalCharge}</span>
+                </div>
+              </div>
+            )}
+            {selectedCardSeatsaReturn.length >= 1 && (
+              <div className="ticket">
+                <div className="header">
+                  <h5>Return Ticket</h5>
+                </div>
+                <hr></hr>
+                <div className="row2">
+                  <span className="label">Train name:</span>
+                  <span className="value">
+                    {selectedCardDataReturn[0]?.trainName}
+                  </span>
+                </div>
+                <div className="row2">
+                  <span className="label">Date:</span>
+                  <span className="value">
+                    {selectedCardDataReturn[0]?.date}
+                  </span>
+                </div>
+                <div className="row2">
+                  <span className="label">Start Place:</span>
+                  <span className="value">{endPlace}</span>
+                </div>
+                <div className="row2">
+                  <span className="label">Start Time:</span>
+                  <span className="value">
+                    {selectedCardDataReturn[0]?.stationData[endPlace]?.time}
+                  </span>
+                </div>
+                <div className="row2">
+                  <span className="label">End Place:</span>
+                  <span className="value">{startPlace}</span>
+                </div>
+                <div className="row2">
+                  <span className="label">End Time:</span>
+                  <span className="value">
+                    {selectedCardDataReturn[0]?.stationData[startPlace]?.time}
+                  </span>
+                </div>
+                <div className="row2">
+                  <span className="label">Seats:</span>
+                  <span className="value">
+                    {selectedCardSeatsaReturn.map((item, index) => (
+                      <div key={index}>{item}</div>
+                    ))}
+                  </span>
+                </div>
+                <hr></hr>
+                <div className="row2">
+                  <span className="label">Charge:</span>
+                  <span className="value">{returnCharge}</span>
+                </div>
+              </div>
+            )}
+            <div className="main_form_content">
+              <button onClick={() =>Payment ()}>
+                Proceed Payment
+              </button>
+            </div>
+          </div>
+        )}
+        <></>
       </div>
     </div>
   );

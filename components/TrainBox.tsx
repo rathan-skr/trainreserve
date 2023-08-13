@@ -115,9 +115,9 @@ const ParentComponent: React.FC<TrainBoxProps> = ({
     { seatName: "B", rows: 8, seatsPerRow: 4, spacingColumn: 2 },
     { seatName: "C", rows: 10, seatsPerRow: 5, spacingColumn: 2 },
   ];
-  const seatSelectionData = data.seatSelectionData || seatSelectionData2;
+  const seatSelectionData = data[0].seatSelectionData || seatSelectionData2;
   const preselectedSeats2 = ["A-1", "B-12", "C-23"];
-  const preselectedSeats = data.preselectedSeats || preselectedSeats2;
+  const preselectedSeats = data[0].preselectedSeats || preselectedSeats2;
   const handleSelectionChange = (seatName: string, selectedSeats: string[]) => {
     setSelectedSeatsData((prevSelectedSeatsData) => {
       // Check if the new selection is different from the previous one
@@ -151,7 +151,6 @@ const ParentComponent: React.FC<TrainBoxProps> = ({
   //----------------------------------------------------------------------formattedSelectedSeats-------------------------------------------------------------------------------------------//
   const formattedSelectedSeats1: string[] = [];
   useEffect(() => {
-   
     formattedSelectedSeats.push(Object.values(selectedSeatsData).flat());
     console.log(formattedSelectedSeats1);
   }, [selectedSeatsData]);
@@ -167,40 +166,44 @@ const ParentComponent: React.FC<TrainBoxProps> = ({
   //   console.log(combined);
   // }, [selectedSeatsData]);
 
-  console.log("data", selectedSeatsData);
+  console.log("data", data[0].id);
   return (
-    <div className="swipe-box" {...handlers}>
-      <div
-        className={`swipe-button ${isFirstBox ? "disabled" : ""}`}
-        onClick={() => handleSwipe(-1)}
-      >
-        <FontAwesomeIcon
-          icon={faChevronLeft}
-          className={isFirstBox ? "disabled" : ""}
-        />
+    <>
+      <div className="swipe-box" {...handlers}>
+        <div
+          className={`swipe-button ${isFirstBox ? "disabled" : ""}`}
+          onClick={() => handleSwipe(-1)}
+        >
+          <FontAwesomeIcon
+            icon={faChevronLeft}
+            className={isFirstBox ? "disabled" : ""}
+          />
+        </div>
+        <div className="seat-selection-box">
+          <SeatSelectionBox
+            data={seatSelectionData[currentIndex]}
+            preselectedSeats={preselectedSeats.filter((seat: any) =>
+              seat.startsWith(seatSelectionData[currentIndex]?.seatName + "-")
+            )}
+            onSelectionChange={handleSelectionChange}
+          />
+        </div>
+        <div
+          className={`swipe-button ${isLastBox ? "disabled" : ""}`}
+          onClick={() => handleSwipe(1)}
+        >
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className={isLastBox ? "disabled" : ""}
+          />
+        </div>
+      </div>{" "}
+      <div className="main_form_content2">
+        <button onClick={() => onButtonClicked(selectedSeatsData)}>
+          Confirm
+        </button>
       </div>
-      <div className="seat-selection-box">
-        <SeatSelectionBox
-          data={seatSelectionData[currentIndex]}
-          preselectedSeats={preselectedSeats.filter((seat: any) =>
-            seat.startsWith(seatSelectionData[currentIndex]?.seatName + "-")
-          )}
-          onSelectionChange={handleSelectionChange}
-        />
-      </div>
-      <div
-        className={`swipe-button ${isLastBox ? "disabled" : ""}`}
-        onClick={() => handleSwipe(1)}
-      >
-        <FontAwesomeIcon
-          icon={faChevronRight}
-          className={isLastBox ? "disabled" : ""}
-        />
-      </div>
-      <button onClick={() => onButtonClicked(selectedSeatsData)}>
-        Confirm
-      </button>
-    </div>
+    </>
   );
 };
 export default ParentComponent;
