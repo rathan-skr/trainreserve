@@ -18,9 +18,9 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <AuthProvider>
-      {/* <Layout> */}
+      <Layout>
         <Component {...pageProps} />
-      {/* </Layout>{" "} */}
+      </Layout>{" "}
     </AuthProvider>
   );
 };

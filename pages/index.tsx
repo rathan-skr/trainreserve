@@ -160,6 +160,15 @@ const Home: React.FC = () => {
       setActiveReturnSection("return");
     }
   };
+  const handleAllCardClick = (clickedItem: any) => {
+    console.log(clickedItem);
+
+    setStationFromID(clickedItem.from);
+    setStartPlace(clickedItem.from);
+
+    setStationToID(clickedItem.to);
+    setEndPlace(clickedItem.to);
+  };
   let activeSection = "";
   let activeBox = "";
   const [selectedArrivalData, setSelectedArrivalData] = useState(null);
@@ -283,23 +292,31 @@ const Home: React.FC = () => {
   const updateSElectedSeats = async () => {
     try {
       const docRef = doc(db, "trainSchedules", selectedCardDataArrival[0]?.id);
-      
+
       // Get the current preselectedSeats from the Firestore document
       const documentSnapshot = await getDoc(docRef);
-      const existingPreselectedSeats = documentSnapshot.data()?.preselectedSeats || [];
-  
+      const existingPreselectedSeats =
+        documentSnapshot.data()?.preselectedSeats || [];
+
       // Merge the existing preselectedSeats with the new seats
-      const mergedSeats = [...existingPreselectedSeats, ...selectedCardSeatsaArrival];
-  
+      const mergedSeats = [
+        ...existingPreselectedSeats,
+        ...selectedCardSeatsaArrival,
+      ];
+
       // Update the Firestore document with the merged seats
       await updateDoc(docRef, { preselectedSeats: mergedSeats });
-      
-      console.log("Preselected seats updated successfully",mergedSeats,selectedCardDataArrival[0]?.id);
+
+      console.log(
+        "Preselected seats updated successfully",
+        mergedSeats,
+        selectedCardDataArrival[0]?.id
+      );
     } catch (error) {
       console.error("Error updating preselected seats:", error);
     }
   };
-  
+
   return (
     <div className="main_container">
       <div className="main_image_container">
@@ -432,7 +449,9 @@ const Home: React.FC = () => {
         <div className="train_box">
           {showArrivalTable && (
             <>
-              <>Select Arrival Seats</>
+              <h3 className="main_h1 right_align_center">
+                Select Arrival Seats
+              </h3>
               <TrainBoxComponent
                 data={selectedCardDataArrival}
                 formattedSelectedSeats={formattedSelectedSeats}
@@ -454,7 +473,7 @@ const Home: React.FC = () => {
           )}
         </div>
         {showBill && (
-          <div className="train_box2">
+          <div className="train_box2 main_h1 right_align_center">
             Billing
             {selectedCardSeatsaArrival.length >= 1 && (
               <div className="ticket">
@@ -512,7 +531,7 @@ const Home: React.FC = () => {
             {selectedCardSeatsaReturn.length >= 1 && (
               <div className="ticket">
                 <div className="header">
-                  <h5>Return Ticket</h5>
+                  <h5 className="main_h1 right_align_center">Return Ticket</h5>
                 </div>
                 <hr></hr>
                 <div className="row2">
@@ -567,7 +586,27 @@ const Home: React.FC = () => {
             </div>
           </div>
         )}
-        <></>
+        <h2 className="main_h1 right_align_center">Available Trains</h2>
+        <hr></hr>
+        <div className="train_cards">
+          {travelDataArray.map((item, index) => (
+            <div
+              className={
+                selectedCardIndexReturn === index ? "selected-card" : ""
+              }
+            >
+              <TravelCard
+                key={index}
+                data={item}
+                onClick={() => {
+                  handleAllCardClick(item);
+                  setSelectedCardIndexReturn(index);
+                  setSelectedCardDataReturn([item]);
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
